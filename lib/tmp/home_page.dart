@@ -12,7 +12,7 @@ class HomePage extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Guia de visita del Jardín Botánico'),
-          backgroundColor: Colors.green[600],
+          backgroundColor: Colors.green,
           elevation: 0,
         ),
         body: Column(
@@ -21,8 +21,8 @@ class HomePage extends StatelessWidget {
             Expanded(
               child: TabBarView(
                 children: [
-                  paginaDeNotificaciones(),
-                  paginaDeZonas(),
+                  notificationPage(context),
+                  zonePage(context),
                 ],
               ),
             ),
@@ -34,7 +34,7 @@ class HomePage extends StatelessWidget {
 
   Widget tabBar() {
     return Container(
-      color: Colors.green[600], // Color del TabBar
+      color: Colors.green, // Color del TabBar
       child: const TabBar(
         indicatorColor: Colors.white,
         tabs: [
@@ -43,13 +43,5 @@ class HomePage extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  Widget paginaDeNotificaciones() {
-    return notificationPage();
-  }
-
-  Widget paginaDeZonas() {
-    return zonePage();
   }
 }
