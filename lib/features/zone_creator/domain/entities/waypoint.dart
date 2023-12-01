@@ -1,11 +1,15 @@
 import 'package:equatable/equatable.dart';
 
 class Waypoint extends Equatable {
-  final double latitud;
-  final double longitud;
+  final int waypointId;
+  final double lattitude;
+  final double longitude;
 
-  const Waypoint({required this.latitud, required this.longitud});
+  const Waypoint(
+      {required this.waypointId,
+      required this.lattitude,
+      required this.longitude});
 
   @override
-  List<Object?> get props => [latitud, longitud];
+  List<Object?> get props => [lattitude, longitude];
 }

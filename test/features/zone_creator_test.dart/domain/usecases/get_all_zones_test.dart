@@ -19,8 +19,8 @@ void main() {
   });
 
   const tZones = [
-    ZoneInfo(id: 1, name: 'Zona 1', waypoints: []),
-    ZoneInfo(id: 2, name: 'Zona 2', waypoints: [])
+    ZoneInfo(zoneId: 1, name: 'Zona 1', waypoints: []),
+    ZoneInfo(zoneId: 2, name: 'Zona 2', waypoints: [])
   ];
 
   test(

@@ -1,0 +1,26 @@
+[
+    {
+      "zoneId": 1,
+      "name": "Zone name 1",
+      "waypoints": [
+        {"waypointId": 1, "lattitude": 1.0, "longitude": 1.0},
+        {"waypointId": 2, "lattitude": 1.0, "longitude": 1.0}
+      ]
+    },
+    {
+      "zoneId": 2,
+      "name": "Zone name 2",
+      "waypoints": [
+        {"waypointId": 3, "lattitude": 2.0, "longitude": 2.0},
+        {"waypointId": 4, "lattitude": 2.0, "longitude": 2.0}
+      ]
+    },
+    {
+      "zoneId": 3,
+      "name": "Zone name 3",
+      "waypoints": [
+        {"waypointId": 5, "lattitude": 3.0, "longitude": 3.0},
+        {"waypointId": 6, "lattitude": 3.0, "longitude": 3.0}
+      ]
+    }
+  ]
