@@ -1,0 +1,9 @@
+[
+    {
+      "zoneId": 1,
+      "name": "name",
+      "waypoints": [
+        {"waypointId": 1, "latitude": 1.0, "longitude": 1.0}
+      ]
+    }
+  ]

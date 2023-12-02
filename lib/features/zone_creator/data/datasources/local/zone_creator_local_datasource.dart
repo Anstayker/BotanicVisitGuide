@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:botanic_visit_guide/features/zone_creator/data/models/zone_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -25,10 +23,8 @@ class ZoneCreatorLocalDataSourceImpl implements ZoneCreatorLocalDataSource {
   Future<List<ZoneModel>> getAllZones() {
     final jsonString = sharedPreferences.getString(CACHE_ZONES_LIST);
     if (jsonString != null) {
-      var test = Future.value(ZoneModel.fromJson(jsonDecode(jsonString)));
-      print(test);
-      // TODO FIX THIS
-      throw Exception();
+      List<ZoneModel> zones = zoneModelFromJson(jsonString);
+      return Future.value(zones);
     } else {
       throw Exception();
     }

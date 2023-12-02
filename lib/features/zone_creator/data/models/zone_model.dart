@@ -1,5 +1,16 @@
-import '../../domain/entities/zone_info.dart';
+// import 'dart:convert';
+
 import 'dart:convert';
+
+import 'package:botanic_visit_guide/features/zone_creator/data/models/waypoint_model.dart';
+
+import '../../domain/entities/zone_info.dart';
+
+List<ZoneModel> zoneModelFromJson(String str) =>
+    List<ZoneModel>.from(json.decode(str).map((x) => ZoneModel.fromJson(x)));
+
+String zoneModelToJson(List<ZoneModel> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class ZoneModel extends ZoneInfo {
   const ZoneModel({required zoneId, required name, required waypoints})
@@ -21,7 +32,17 @@ class ZoneModel extends ZoneInfo {
     );
   }
 
-  String toJson() => json.encode(toMap());
+  factory ZoneModel.fromJson(Map<String, dynamic> json) => ZoneModel(
+        zoneId: json["zoneId"],
+        name: json["name"],
+        waypoints: List<WaypointModel>.from(
+            json["waypoints"].map((x) => WaypointModel.fromJson(x))),
+      );
 
-  static ZoneInfo fromJson(String source) => fromMap(json.decode(source));
+  Map<String, dynamic> toJson() => {
+        "zoneId": zoneId,
+        "name": name,
+        "waypoints": List<dynamic>.from(
+            waypoints.map((x) => WaypointModel.fromWaypoint(x).toJson())),
+      };
 }

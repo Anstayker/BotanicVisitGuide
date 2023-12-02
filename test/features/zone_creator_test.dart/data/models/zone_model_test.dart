@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:botanic_visit_guide/features/zone_creator/data/models/waypoint_model.dart';
 import 'package:botanic_visit_guide/features/zone_creator/data/models/zone_model.dart';
 import 'package:botanic_visit_guide/features/zone_creator/domain/entities/zone_info.dart';
@@ -7,7 +9,7 @@ import '../../../../fixtures/fixture_reader.dart';
 
 void main() {
   const tWaypointModel =
-      WaypointModel(waypointId: 1, lattitude: 1.0, longitude: 1.0);
+      WaypointModel(waypointId: 1, latitude: 1.0, longitude: 1.0);
   const tZoneModel =
       ZoneModel(zoneId: 1, name: 'name', waypoints: [tWaypointModel]);
   const tZoneInfo =
@@ -42,18 +44,49 @@ void main() {
     },
   );
 
-  group('from Json', () {
-    final jsonWithOneElement = fixture('zone_creator_cached.json');
-    final expectedMap = ZoneModel(zoneId: 1, name: 'Zone Name', waypoints: []);
+  test(
+    "should return a valid model from Json",
+    () async {
+      // act
+      final zoneJson = json.decode(fixture('zone_example.json'));
+      final result = ZoneModel.fromJson(zoneJson[0]);
+      // assert
+      expect(result.zoneId, tZoneModel.zoneId);
+      expect(result.name, tZoneModel.name);
+      expect(result.waypoints, tZoneModel.waypoints);
+    },
+  );
 
-    test(
-      "should be able to convert a Json to a valid Map",
-      () async {
-        // act
-        final result = ZoneModel.fromJson(jsonWithOneElement);
-        // assert
-        expect(result, expectedMap);
-      },
-    );
-  });
+  test(
+    "should return a valid model to Json",
+    () async {
+      // act
+      final result = [tZoneModel.toJson()];
+      // assert
+      expect(result, json.decode(fixture('zone_example.json')));
+    },
+  );
+
+  test(
+    "should be able to convert from JSON to ZoneModel",
+    () async {
+      // act
+      final tZoneModelJson =
+          jsonEncode(jsonDecode(fixture('zone_example.json')));
+      final result = zoneModelFromJson(tZoneModelJson);
+      // assert
+      expect(result, [tZoneModel]);
+    },
+  );
+
+  test(
+    "should be abe to convert from ZoneModel to JSON",
+    () async {
+      // act
+      final result = zoneModelToJson([tZoneModel]);
+      final matcher = jsonEncode(jsonDecode(fixture('zone_example.json')));
+      // assert
+      expect(result, matcher);
+    },
+  );
 }

@@ -22,19 +22,21 @@ void main() {
 
   group('getAllZones', () {
     final tZoneListJson = fixture('zone_creator_cached.json');
-    final tZoneList = [ZoneModel.fromJson(jsonDecode(tZoneListJson))];
+    final tZoneList = (jsonDecode(tZoneListJson) as List)
+        .map((item) => ZoneModel.fromJson(item))
+        .toList();
 
     test(
-      "Should return list of ZoneModel when there is only one in the cache",
+      "Should return list of ZoneModels from the cache",
       () async {
         // arrange
         when(() => mockSharedPreferences.getString(any()))
             .thenReturn(tZoneListJson);
         // act
-        //final result = await localDataSource.getAllZones();
+        final result = await localDataSource.getAllZones();
         // assert
-        verify(() => mockSharedPreferences.getString('CACHED_ZONE_LIST'));
-        expect(tZoneList, equals(tZoneList));
+        verify(() => mockSharedPreferences.getString('CACHE_ZONES_LIST'));
+        expect(result, equals(tZoneList));
       },
     );
   });

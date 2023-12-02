@@ -2,14 +2,13 @@ import '../../domain/entities/waypoint.dart';
 
 class WaypointModel extends Waypoint {
   const WaypointModel(
-      {required waypointId, required lattitude, required longitude})
-      : super(
-            waypointId: waypointId, lattitude: lattitude, longitude: longitude);
+      {required waypointId, required latitude, required longitude})
+      : super(waypointId: waypointId, latitude: latitude, longitude: longitude);
 
   factory WaypointModel.fromJson(Map<String, dynamic> json) {
     return WaypointModel(
       waypointId: json['waypointId'],
-      lattitude: json['lattitude'],
+      latitude: json['latitude'],
       longitude: json['longitude'],
     );
   }
@@ -17,8 +16,16 @@ class WaypointModel extends Waypoint {
   Map<String, dynamic> toJson() {
     return {
       'waypointId': waypointId,
-      'lattitude': lattitude,
+      'latitude': latitude,
       'longitude': longitude,
     };
+  }
+
+  static WaypointModel fromWaypoint(Waypoint waypoint) {
+    return WaypointModel(
+      waypointId: waypoint.waypointId,
+      latitude: waypoint.latitude,
+      longitude: waypoint.longitude,
+    );
   }
 }
