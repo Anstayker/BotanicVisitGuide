@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:botanic_visit_guide/features/zone_creator/data/datasources/local/zone_creator_local_datasource.dart';
+import 'package:botanic_visit_guide/features/zone_creator/data/models/waypoint_model.dart';
 import 'package:botanic_visit_guide/features/zone_creator/data/models/zone_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -37,6 +38,28 @@ void main() {
         // assert
         verify(() => mockSharedPreferences.getString('CACHE_ZONES_LIST'));
         expect(result, equals(tZoneList));
+      },
+    );
+  });
+
+  group('addZone', () {
+    const tWaypoint =
+        WaypointModel(waypointId: 1, latitude: 1.0, longitude: 1.0);
+    const tZoneModel =
+        ZoneModel(zoneId: 1, name: 'Zone Name', waypoints: [tWaypoint]);
+
+    test(
+      "Should add a ZoneModel to the cache",
+      () async {
+        // arrange
+        when(() => mockSharedPreferences.setString(any(), any()))
+            .thenAnswer((_) async => true);
+        // act
+        final result = await localDataSource.addZone(tZoneModel);
+        // result
+        verify(() => mockSharedPreferences.setString(
+            'CACHE_ZONES_LIST', any(that: isNotNull)));
+        expect(result, equals(true));
       },
     );
   });

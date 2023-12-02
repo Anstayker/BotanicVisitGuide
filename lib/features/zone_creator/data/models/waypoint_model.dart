@@ -28,4 +28,12 @@ class WaypointModel extends Waypoint {
       longitude: waypoint.longitude,
     );
   }
+
+  factory WaypointModel.fromEntity(Waypoint entity) {
+    return WaypointModel(
+      waypointId: entity.waypointId,
+      latitude: entity.latitude,
+      longitude: entity.longitude,
+    );
+  }
 }

@@ -45,4 +45,13 @@ class ZoneModel extends ZoneInfo {
         "waypoints": List<dynamic>.from(
             waypoints.map((x) => WaypointModel.fromWaypoint(x).toJson())),
       };
+
+  factory ZoneModel.fromEntity(ZoneInfo entity) {
+    return ZoneModel(
+      zoneId: entity.zoneId,
+      name: entity.name,
+      waypoints:
+          entity.waypoints.map((e) => WaypointModel.fromEntity(e)).toList(),
+    );
+  }
 }
