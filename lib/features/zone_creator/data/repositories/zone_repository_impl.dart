@@ -1,11 +1,10 @@
-import 'package:botanic_visit_guide/core/errors/failures.dart';
-import 'package:botanic_visit_guide/features/zone_creator/data/models/zone_model.dart';
-import 'package:botanic_visit_guide/features/zone_creator/domain/entities/zone_info.dart';
-import 'package:botanic_visit_guide/features/zone_creator/domain/repositories/zone_repository.dart';
-
 import 'package:dartz/dartz.dart';
 
+import '../../../../core/errors/failures.dart';
+import '../../domain/entities/zone_info.dart';
+import '../../domain/repositories/zone_repository.dart';
 import '../datasources/local/zone_creator_local_datasource.dart';
+import '../models/zone_model.dart';
 
 class ZoneRepositoryImpl implements ZoneRepository {
   final ZoneCreatorLocalDataSource localDataSource;

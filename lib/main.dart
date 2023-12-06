@@ -1,5 +1,6 @@
-import 'package:botanic_visit_guide/tmp/welcome_page.dart';
 import 'package:flutter/material.dart';
+
+import 'tmp/welcome_page.dart';
 
 void main() => runApp(const MyApp());
 

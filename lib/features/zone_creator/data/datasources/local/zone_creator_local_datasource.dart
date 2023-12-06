@@ -1,7 +1,8 @@
 import 'dart:convert';
 
-import 'package:botanic_visit_guide/features/zone_creator/data/models/zone_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../models/zone_model.dart';
 
 abstract class ZoneCreatorLocalDataSource {
   Future<bool> addZone(ZoneModel newZone);

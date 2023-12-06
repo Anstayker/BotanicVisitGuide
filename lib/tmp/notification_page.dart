@@ -1,4 +1,4 @@
-import 'package:botanic_visit_guide/tmp/notification_details.dart';
+import 'notification_details.dart';
 import 'package:flutter/material.dart';
 
 Widget notificationPage(BuildContext context) {

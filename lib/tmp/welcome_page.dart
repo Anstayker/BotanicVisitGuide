@@ -1,4 +1,4 @@
-import 'package:botanic_visit_guide/tmp/home_page.dart';
+import 'home_page.dart';
 import 'package:flutter/material.dart';
 
 class WelcomePage extends StatelessWidget {

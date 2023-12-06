@@ -1,6 +1,7 @@
-import 'package:botanic_visit_guide/core/errors/failures.dart';
-import 'package:botanic_visit_guide/features/zone_creator/domain/entities/zone_info.dart';
 import 'package:dartz/dartz.dart';
+
+import '../../../../core/errors/failures.dart';
+import '../entities/zone_info.dart';
 
 abstract class ZoneRepository {
   Future<Either<Failure, List<ZoneInfo>>> getAllZones();

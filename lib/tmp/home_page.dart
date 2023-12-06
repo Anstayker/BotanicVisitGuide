@@ -1,6 +1,7 @@
-import 'package:botanic_visit_guide/tmp/notification_page.dart';
-import 'package:botanic_visit_guide/tmp/zone_page.dart';
 import 'package:flutter/material.dart';
+
+import 'notification_page.dart';
+import 'zone_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
