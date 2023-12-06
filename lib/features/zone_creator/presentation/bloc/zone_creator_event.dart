@@ -10,7 +10,7 @@ sealed class ZoneCreatorEvent extends Equatable {
 class AddZoneEvent extends ZoneCreatorEvent {
   final ZoneInfo zone;
 
-  const AddZoneEvent(this.zone);
+  const AddZoneEvent({required this.zone});
 }
 
 class GetAllZonesEvent extends ZoneCreatorEvent {}
