@@ -1,3 +1,4 @@
+import 'package:botanic_visit_guide/core/errors/failures.dart';
 import 'package:botanic_visit_guide/core/usecases/usecase.dart';
 import 'package:botanic_visit_guide/features/zone_creator/domain/entities/zone_info.dart';
 import 'package:botanic_visit_guide/features/zone_creator/domain/repositories/zone_repository.dart';
@@ -38,11 +39,19 @@ void main() {
     },
   );
 
-  // TODO test failure
   test(
     "should return failure when the repository fails",
     () async {
       // arrange
+      final Failure tFailure = CacheException();
+      when(() => mockZoneRepository.getAllZones())
+          .thenAnswer((_) async => Left(tFailure));
+      // act
+      final result = await getAllZones(NoParams());
+      // assert
+      expect(result, equals(Left(tFailure)));
+      verify(() => mockZoneRepository.getAllZones());
+      verifyNoMoreInteractions(mockZoneRepository);
     },
   );
 }

@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../../../core/usecases/usecase.dart';
@@ -31,9 +32,11 @@ class ZoneCreatorBloc extends Bloc<ZoneCreatorEvent, ZoneCreatorState> {
     on<AddZoneEvent>((event, emit) async {
       emit(ZoneAddSubmiting());
       final result = await addZone(Params(zone: event.zone));
-      result.fold(
-          (failure) => const ZoneAddFailure(message: cacheFailureMessage),
-          (_) => emit(ZoneAddSuccess()));
+      result
+          .fold((failure) => const ZoneAddFailure(message: cacheFailureMessage),
+              (_) async {
+        emit(ZoneAddSuccess());
+      });
     });
   }
 }

@@ -1,3 +1,4 @@
+import 'package:botanic_visit_guide/core/errors/failures.dart';
 import 'package:botanic_visit_guide/features/zone_creator/data/datasources/local/zone_creator_local_datasource.dart';
 import 'package:botanic_visit_guide/features/zone_creator/data/models/zone_model.dart';
 import 'package:botanic_visit_guide/features/zone_creator/data/repositories/zone_repository_impl.dart';
@@ -43,12 +44,26 @@ void main() {
         expect(zonInfoList, tZoneInfoList);
       },
     );
+
+    test(
+      "should return a list of ZoneInfo when getAllZones is successful",
+      () async {
+        // arrange
+        when(() => mockLocalDataSource.getAllZones())
+            .thenAnswer((_) async => tZoneModeList);
+        // act
+        final result = await repository.getAllZones();
+        // assert
+        expect(result, isA<Either<Failure, List<ZoneInfo>>>());
+      },
+    );
   });
 
   group('addZone', () {
     const tWaypoint = Waypoint(waypointId: 1, latitude: 1.0, longitude: 1.0);
     const tZoneInfo =
         ZoneInfo(zoneId: 1, name: 'Zone 1', waypoints: [tWaypoint]);
+
     final tZoneModel = ZoneModel.fromEntity(tZoneInfo);
 
     test('should add zone to the local data source', () async {
@@ -60,7 +75,5 @@ void main() {
       verify(() => mockLocalDataSource.addZone(tZoneModel)).called(1);
       expect(result, equals(right(null)));
     });
-
-    // Agrega más pruebas para manejar casos de error
   });
 }

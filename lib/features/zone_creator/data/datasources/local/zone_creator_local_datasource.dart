@@ -9,8 +9,7 @@ abstract class ZoneCreatorLocalDataSource {
   Future<List<ZoneModel>> getAllZones();
 }
 
-// ignore: constant_identifier_names
-const CACHE_ZONES_LIST = 'CACHE_ZONES_LIST';
+const cacheZonesList = 'CACHE_ZONES_LIST';
 
 class ZoneCreatorLocalDataSourceImpl implements ZoneCreatorLocalDataSource {
   final SharedPreferences sharedPreferences;
@@ -26,14 +25,14 @@ class ZoneCreatorLocalDataSourceImpl implements ZoneCreatorLocalDataSource {
       zonesInJson.add(jsonEncode(zone.toJson()));
     }
     String zonesInString = '[${zonesInJson.join(',')}]';
+    print(zonesInString);
 
-    return sharedPreferences.setString(
-        CACHE_ZONES_LIST, jsonEncode(zonesInString));
+    return sharedPreferences.setString(cacheZonesList, zonesInString);
   }
 
   @override
   Future<List<ZoneModel>> getAllZones() {
-    final jsonString = sharedPreferences.getString(CACHE_ZONES_LIST);
+    final jsonString = sharedPreferences.getString(cacheZonesList);
     if (jsonString != null) {
       List<ZoneModel> zones = zoneModelFromJson(jsonString);
       return Future.value(zones);

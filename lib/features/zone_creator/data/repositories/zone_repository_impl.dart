@@ -35,8 +35,9 @@ class ZoneRepositoryImpl implements ZoneRepository {
 
   ZoneInfo _mapZoneModelToZoneInfo(ZoneModel zoneModel) {
     return ZoneInfo(
-        zoneId: zoneModel.zoneId,
-        name: zoneModel.name,
-        waypoints: zoneModel.waypoints);
+      zoneId: zoneModel.zoneId,
+      name: zoneModel.name,
+      waypoints: zoneModel.waypoints,
+    );
   }
 }

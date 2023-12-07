@@ -1,5 +1,7 @@
 import 'package:botanic_visit_guide/features/zone_creator/domain/entities/waypoint.dart';
+import 'package:botanic_visit_guide/features/zone_creator/domain/entities/zone_info.dart';
 import 'package:botanic_visit_guide/features/zone_creator/presentation/bloc/bloc.dart';
+import 'package:botanic_visit_guide/features/zone_creator/presentation/pages/zone_visualizer_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -15,8 +17,10 @@ class ZoneCreatorPage extends StatefulWidget {
 
 class _ZoneCreatorPageState extends State<ZoneCreatorPage> {
   final ScrollController _scrollController = ScrollController();
+  final TextEditingController _zoneNameController = TextEditingController();
   bool _isExpanded = false;
   final _formKey = GlobalKey<FormState>();
+  String _zoneName = '';
   List<Waypoint> _waypointsList = [];
   bool _isFormActive = true;
 
@@ -43,20 +47,20 @@ class _ZoneCreatorPageState extends State<ZoneCreatorPage> {
                 if (state is ZoneCreatorInitial) {
                   _isFormActive = true;
                   return _zoneCreatorForm();
-                }
-                if (state is ZoneAddSubmiting) {
+                } else if (state is ZoneAddSubmiting) {
                   _isFormActive = false;
-                }
-                if (state is ZoneAddSuccess) {
+                } else if (state is ZoneAddSuccess) {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                           content: Text('Nueva zona creada exitosamente')),
                     );
-                    Navigator.pop(context);
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => const ZoneVisualizerPage()));
                   });
-                }
-                if (state is ZoneAddFailure) {
+                } else if (state is ZoneAddFailure) {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     _showAddFailureDialog(context, state);
                   });
@@ -99,7 +103,12 @@ class _ZoneCreatorPageState extends State<ZoneCreatorPage> {
               title: 'Crear una nueva zona *',
               verticalPadding: 16.0,
             ),
-            ZoneNameTextField(isFormActive: _isFormActive),
+            ZoneNameTextField(
+                isFormActive: _isFormActive,
+                zoneNameController: _zoneNameController,
+                onSaved: (value) {
+                  _zoneName = value ?? '';
+                }),
             const ZoneCreatorTitle(
               title: 'Añadir punto de referencia *',
               verticalPadding: 16.0,
@@ -118,11 +127,15 @@ class _ZoneCreatorPageState extends State<ZoneCreatorPage> {
             ),
             _formSizedBox(),
             CreateZoneButton(
-              formKey: _formKey,
-              waypointsList: _waypointsList,
-              context: context,
-              isFormActive: _isFormActive,
-            ),
+                formKey: _formKey,
+                context: context,
+                isFormActive: _isFormActive,
+                newZone: ZoneInfo(
+                  // TODO cambiar a id
+                  zoneId: 1,
+                  name: _zoneNameController.text,
+                  waypoints: _waypointsList,
+                )),
           ],
         ),
       ),
