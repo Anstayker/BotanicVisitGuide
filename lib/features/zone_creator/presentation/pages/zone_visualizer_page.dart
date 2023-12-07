@@ -57,14 +57,33 @@ class ZoneVisualizerPage extends StatelessWidget {
                           // TODO Color should be in theme data
                           color: Colors.grey[100],
                           child: ExpansionTile(
-                              title: Text(state.zones[index].name),
-                              //subtitle: Text('${state.zones[index].zoneId}'),
-                              children: [
-                                Text(
-                                    'latitud: ${state.zones[index].waypoints[0].latitude}'),
-                                Text(
-                                    'longitud: ${state.zones[index].waypoints[0].longitude}')
-                              ]),
+                            title: Text(state.zones[index].name),
+                            //subtitle: Text('${state.zones[index].zoneId}'),
+                            children: state.zones[index].waypoints
+                                .map((waypoint) => Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                            'Wayppoint: ${waypoint.waypointId}'),
+                                        const Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 8.0),
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          children: [
+                                            Text(
+                                                'Latitud: ${waypoint.latitude}'),
+                                            Text(
+                                                'Loingutd: ${waypoint.longitude}'),
+                                          ],
+                                        ),
+                                      ],
+                                    ))
+                                .toList(),
+                          ),
                         );
                       }),
                 );
