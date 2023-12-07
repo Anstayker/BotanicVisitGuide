@@ -25,7 +25,7 @@ class ZoneLoadFailure extends ZoneCreatorState {
 }
 
 // ! Add new Zone
-class ZoneAddWaiting extends ZoneCreatorState {}
+//class ZoneAddWaiting extends ZoneCreatorState {}
 
 class ZoneAddSubmiting extends ZoneCreatorState {}
 

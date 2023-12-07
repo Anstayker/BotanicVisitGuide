@@ -29,7 +29,6 @@ class ZoneCreatorBloc extends Bloc<ZoneCreatorEvent, ZoneCreatorState> {
     });
 
     on<AddZoneEvent>((event, emit) async {
-      emit(ZoneAddWaiting());
       emit(ZoneAddSubmiting());
       final result = await addZone(Params(zone: event.zone));
       result.fold(
