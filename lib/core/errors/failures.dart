@@ -13,3 +13,5 @@ abstract class Failure extends Equatable {
 class ServerException extends Failure {}
 
 class CacheException extends Failure {}
+
+class PermissionException extends Failure {}

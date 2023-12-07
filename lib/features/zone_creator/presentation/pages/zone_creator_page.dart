@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 
+import 'package:dartz/dartz.dart' as dartz;
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geolocator/geolocator.dart';
 
+import '../../../../core/errors/failures.dart';
+import '../../../../core/services/gps_service.dart';
 import '../../../../injection_container.dart';
 import '../../domain/entities/waypoint.dart';
 import '../../domain/entities/zone_info.dart';
@@ -46,7 +50,6 @@ class _ZoneCreatorPageState extends State<ZoneCreatorPage> {
             BlocBuilder<ZoneCreatorBloc, ZoneCreatorState>(
               builder: (context, state) {
                 if (state is ZoneCreatorInitial) {
-                  _isFormActive = true;
                   return _zoneCreatorForm();
                 } else if (state is ZoneAddSubmiting) {
                   _isFormActive = false;
@@ -204,11 +207,20 @@ class _ZoneCreatorPageState extends State<ZoneCreatorPage> {
         onPressed: _isFormActive
             ? () async {
                 setState(() {
-                  _waypointsList.add(Waypoint(
-                      waypointId: _waypointsList.length + 1,
-                      // TODO cambiar latitud y longitud por la del usuario
-                      latitude: 1.0,
-                      longitude: 1.0));
+                  _isFormActive = false;
+                });
+                dartz.Either<Failure, Position> position =
+                    await sl<GpsService>().currentPosition;
+                position.fold(
+                    // TODO implement error message
+                    (l) => print('error'),
+                    (r) => _waypointsList.add(Waypoint(
+                        waypointId: _waypointsList.length + 1,
+                        latitude: r.latitude,
+                        longitude: r.longitude)));
+
+                setState(() {
+                  _isFormActive = true;
                   _isExpanded = true;
                 });
                 if (_isExpanded) {

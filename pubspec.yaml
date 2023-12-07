@@ -25,6 +25,8 @@ dependencies:
   internet_connection_checker_plus: ^2.1.0
   # Class Diagram
   dcdg: ^4.1.0
+  # Geolocator
+  geolocator: ^10.1.0
   
   flutter:
     sdk: flutter
