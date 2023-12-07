@@ -1,7 +1,8 @@
+import 'package:botanic_visit_guide/config/theme/app_themes.dart';
 import 'package:flutter/material.dart';
-import 'injection_container.dart' as dependencies;
 
-import 'tmp/welcome_page.dart';
+import 'features/zone_creator/presentation/pages/zone_visualizer_page.dart';
+import 'injection_container.dart' as dependencies;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,10 +15,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Material App',
-      home: WelcomePage(),
+      theme: defaultTheme(),
+      home: const ZoneVisualizerPage(),
     );
   }
 }

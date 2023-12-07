@@ -22,7 +22,7 @@ dependencies:
   shared_preferences: ^2.2.2
   sqflite: ^2.3.0
   # Remote API
-  data_connection_checker: ^0.3.4
+  internet_connection_checker_plus: ^2.1.0
   # Class Diagram
   dcdg: ^4.1.0
   
