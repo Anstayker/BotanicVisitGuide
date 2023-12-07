@@ -1,12 +1,14 @@
-import 'package:botanic_visit_guide/features/zone_creator/domain/entities/waypoint.dart';
-import 'package:botanic_visit_guide/features/zone_creator/domain/entities/zone_info.dart';
-import 'package:botanic_visit_guide/features/zone_creator/presentation/bloc/bloc.dart';
-import 'package:botanic_visit_guide/features/zone_creator/presentation/pages/zone_visualizer_page.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../injection_container.dart';
+import '../../domain/entities/waypoint.dart';
+import '../../domain/entities/zone_info.dart';
+import '../bloc/bloc.dart';
 import '../widgets/widgets.dart';
+
+import 'zone_visualizer_page.dart';
 
 class ZoneCreatorPage extends StatefulWidget {
   const ZoneCreatorPage({super.key});
@@ -20,7 +22,6 @@ class _ZoneCreatorPageState extends State<ZoneCreatorPage> {
   final TextEditingController _zoneNameController = TextEditingController();
   bool _isExpanded = false;
   final _formKey = GlobalKey<FormState>();
-  String _zoneName = '';
   List<Waypoint> _waypointsList = [];
   bool _isFormActive = true;
 
@@ -55,10 +56,11 @@ class _ZoneCreatorPageState extends State<ZoneCreatorPage> {
                       const SnackBar(
                           content: Text('Nueva zona creada exitosamente')),
                     );
-                    Navigator.pushReplacement(
+                    Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(
-                            builder: (_) => const ZoneVisualizerPage()));
+                            builder: (_) => const ZoneVisualizerPage()),
+                        (Route<dynamic> route) => false);
                   });
                 } else if (state is ZoneAddFailure) {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -106,9 +108,7 @@ class _ZoneCreatorPageState extends State<ZoneCreatorPage> {
             ZoneNameTextField(
                 isFormActive: _isFormActive,
                 zoneNameController: _zoneNameController,
-                onSaved: (value) {
-                  _zoneName = value ?? '';
-                }),
+                onSaved: (value) {}),
             const ZoneCreatorTitle(
               title: 'Añadir punto de referencia *',
               verticalPadding: 16.0,

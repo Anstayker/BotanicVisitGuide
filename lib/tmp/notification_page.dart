@@ -1,5 +1,6 @@
-import 'notification_details.dart';
 import 'package:flutter/material.dart';
+
+import 'notification_details.dart';
 
 Widget notificationPage(BuildContext context) {
   return Scaffold(

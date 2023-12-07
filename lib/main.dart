@@ -1,4 +1,4 @@
-import 'package:botanic_visit_guide/config/theme/app_themes.dart';
+import 'config/theme/app_themes.dart';
 import 'package:flutter/material.dart';
 
 import 'features/zone_creator/presentation/pages/zone_visualizer_page.dart';

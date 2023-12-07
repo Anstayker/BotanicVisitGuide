@@ -1,11 +1,11 @@
-import 'package:botanic_visit_guide/features/zone_creator/data/datasources/local/zone_creator_local_datasource.dart';
-import 'package:botanic_visit_guide/features/zone_creator/presentation/bloc/bloc.dart';
-import 'package:botanic_visit_guide/features/zone_creator/presentation/widgets/zone_creator_title.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../injection_container.dart';
+import '../bloc/bloc.dart';
+import '../widgets/zone_creator_title.dart';
+
 import 'zone_creator_page.dart';
 
 class ZoneVisualizerPage extends StatelessWidget {
@@ -15,7 +15,7 @@ class ZoneVisualizerPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Zone Visualizer'),
+        title: const Text('Visualizador de Zonas'),
       ),
       body: buildBody(context),
       floatingActionButton: FloatingActionButton(
@@ -44,22 +44,27 @@ class ZoneVisualizerPage extends StatelessWidget {
           BlocBuilder<ZoneCreatorBloc, ZoneCreatorState>(
             builder: (context, state) {
               if (state is ZoneCreatorInitial) {
-                print('Initial state');
-                var test = sl<SharedPreferences>().get(cacheZonesList);
-                print(test);
                 BlocProvider.of<ZoneCreatorBloc>(context)
                     .add(GetAllZonesEvent());
               } else if (state is ZoneLoading) {
-                print('Loading');
                 return const CircularProgressIndicator();
               } else if (state is ZoneLoadSuccess) {
-                print('Load Sucess');
                 return Expanded(
                   child: ListView.builder(
                       itemCount: state.zones.length,
                       itemBuilder: (context, index) {
-                        return ListTile(
-                          title: Text(state.zones[index].name),
+                        return Card(
+                          // TODO Color should be in theme data
+                          color: Colors.grey[100],
+                          child: ExpansionTile(
+                              title: Text(state.zones[index].name),
+                              //subtitle: Text('${state.zones[index].zoneId}'),
+                              children: [
+                                Text(
+                                    'latitud: ${state.zones[index].waypoints[0].latitude}'),
+                                Text(
+                                    'longitud: ${state.zones[index].waypoints[0].longitude}')
+                              ]),
                         );
                       }),
                 );

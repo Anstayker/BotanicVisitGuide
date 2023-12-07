@@ -25,8 +25,6 @@ class ZoneCreatorLocalDataSourceImpl implements ZoneCreatorLocalDataSource {
       zonesInJson.add(jsonEncode(zone.toJson()));
     }
     String zonesInString = '[${zonesInJson.join(',')}]';
-    print(zonesInString);
-
     return sharedPreferences.setString(cacheZonesList, zonesInString);
   }
 

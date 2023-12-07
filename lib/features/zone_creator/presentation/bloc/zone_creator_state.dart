@@ -10,6 +10,7 @@ sealed class ZoneCreatorState extends Equatable {
 class ZoneCreatorInitial extends ZoneCreatorState {}
 
 // ! Get Zones
+
 class ZoneLoading extends ZoneCreatorState {}
 
 class ZoneLoadSuccess extends ZoneCreatorState {
