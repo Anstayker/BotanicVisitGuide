@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 class WaypointData extends Equatable {
-  final int waypointId;
+  final String waypointId;
   final double latitude;
   final double longitude;
 
