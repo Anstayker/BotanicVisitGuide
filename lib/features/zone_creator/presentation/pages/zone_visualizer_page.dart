@@ -14,9 +14,9 @@ class ZoneVisualizerPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Visualizador de Zonas'),
-      ),
+      // appBar: AppBar(
+      //   title: const Text('Visualizador de Zonas'),
+      // ),
       body: buildBody(context),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

@@ -6,7 +6,12 @@ ThemeData defaultTheme() {
     appBarTheme: defaultAppBarTheme(),
     floatingActionButtonTheme: defaultFloatingActionButtonTheme(),
     elevatedButtonTheme: defaultElevatedButtonThemeData(),
+    tabBarTheme: defaultTabBarTheme(),
   );
+}
+
+TabBarTheme defaultTabBarTheme() {
+  return const TabBarTheme(indicatorColor: Colors.white);
 }
 
 AppBarTheme defaultAppBarTheme() {

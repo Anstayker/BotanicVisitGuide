@@ -1,6 +1,8 @@
-import 'package:botanic_visit_guide/features/zone_creator/presentation/pages/zone_creator_page.dart';
-import 'package:botanic_visit_guide/features/zone_creator/presentation/pages/zone_visualizer_page.dart';
 import 'package:flutter/material.dart';
+
+import '../../features/home/presentation/pages/home_page.dart';
+import '../../features/zone_creator/presentation/pages/zone_creator_page.dart';
+import '../../features/zone_creator/presentation/pages/zone_visualizer_page.dart';
 
 class AppRoutes {
   static const home = '/';
@@ -10,7 +12,7 @@ class AppRoutes {
   static Route onGenerateRoutes(RouteSettings settings) {
     switch (settings.name) {
       case home:
-        return _materialRoute(const ZoneVisualizerPage());
+        return _materialRoute(const HomePage());
       case zoneCreator:
         return _materialRoute(const ZoneCreatorPage());
       case zoneVisualizer:
