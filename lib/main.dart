@@ -1,3 +1,5 @@
+import 'package:botanic_visit_guide/config/routes/app_routes.dart';
+
 import 'config/theme/app_themes.dart';
 import 'package:flutter/material.dart';
 
@@ -19,6 +21,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Material App',
       theme: defaultTheme(),
+      onGenerateRoute: AppRoutes.onGenerateRoutes,
       home: const ZoneVisualizerPage(),
     );
   }
