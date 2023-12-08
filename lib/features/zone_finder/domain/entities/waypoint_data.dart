@@ -1,11 +1,11 @@
 import 'package:equatable/equatable.dart';
 
-class Waypoint extends Equatable {
+class WaypointData extends Equatable {
   final int waypointId;
   final double latitude;
   final double longitude;
 
-  const Waypoint(
+  const WaypointData(
       {required this.waypointId,
       required this.latitude,
       required this.longitude});

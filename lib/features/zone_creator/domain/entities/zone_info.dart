@@ -14,5 +14,5 @@ class ZoneInfo extends Equatable {
   });
 
   @override
-  List<Object?> get props => [name, waypoints];
+  List<Object?> get props => [zoneId, name, waypoints];
 }
