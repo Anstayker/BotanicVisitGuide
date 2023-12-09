@@ -22,7 +22,7 @@ void main() {
   const tWaypoint =
       WaypointData(waypointId: '1', latitude: 1.0, longitude: 1.0);
   const tZoneData = ZoneData(
-      zoneId: 1,
+      zoneId: "1",
       zoneName: 'zoneName',
       zoneDescription: 'zoneDescription',
       waypoints: [tWaypoint]);

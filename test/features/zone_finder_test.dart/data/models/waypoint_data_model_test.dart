@@ -1,6 +1,7 @@
+import 'package:flutter_test/flutter_test.dart';
+
 import 'package:botanic_visit_guide/features/zone_finder/data/models/waypoint_data_model.dart';
 import 'package:botanic_visit_guide/features/zone_finder/domain/entities/waypoint_data.dart';
-import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   const tWaypointDataModel = WaypointDataModel(

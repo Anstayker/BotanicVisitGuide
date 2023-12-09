@@ -1,5 +1,7 @@
-import 'package:botanic_visit_guide/features/zone_finder/data/models/zone_data_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../../core/errors/exceptions.dart';
+import '../models/zone_data_model.dart';
 
 abstract class ZoneFinderLocalDataSource {
   Future<List<ZoneDataModel>> getAllZones();
@@ -15,13 +17,26 @@ class ZoneFinderLocalDataSourceImpl implements ZoneFinderLocalDataSource {
 
   @override
   Future<List<ZoneDataModel>> getAllZones() {
-    // TODO: implement getAllZones
-    throw UnimplementedError();
+    final jsonString = sharedPreferences.getString(cacheZonesData);
+    if (jsonString != null) {
+      List<ZoneDataModel> zones = zoneDataModelFromJson(jsonString);
+      return Future.value(zones);
+    } else {
+      return Future(() => []);
+    }
   }
 
   @override
   Future<ZoneDataModel> getZoneData(String zoneId) {
-    // TODO: implement getZoneData
-    throw UnimplementedError();
+    final jsonString = sharedPreferences.getString(cacheZonesData);
+    if (jsonString != null) {
+      List<ZoneDataModel> zones = zoneDataModelFromJson(jsonString);
+      for (var zone in zones) {
+        if (zone.zoneId == zoneId) {
+          return Future.value(zone);
+        }
+      }
+    }
+    throw NotFoundException('Zone not found');
   }
 }

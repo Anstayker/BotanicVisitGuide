@@ -4,14 +4,15 @@ import '../../domain/entities/waypoint_data.dart';
 
 import 'waypoint_data_model.dart';
 
-List<ZoneDataModel> zoneModelFromJson(String str) => List<ZoneDataModel>.from(
-    json.decode(str).map((x) => ZoneDataModel.fromJson(x)));
+List<ZoneDataModel> zoneDataModelFromJson(String str) =>
+    List<ZoneDataModel>.from(
+        json.decode(str).map((x) => ZoneDataModel.fromJson(x)));
 
-String zoneModelToJson(List<ZoneDataModel> data) =>
+String zoneDataModelToJson(List<ZoneDataModel> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class ZoneDataModel {
-  int zoneId;
+  String zoneId;
   String name;
   String? description;
   List<WaypointData> waypoints;
