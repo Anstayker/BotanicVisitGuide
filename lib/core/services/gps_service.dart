@@ -21,7 +21,7 @@ class GpsServiceImpl implements GpsService {
     if (permission == LocationPermission.denied) {
       permission = await geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        return Left(PermissionException());
+        return Left(PermissionFailure());
       }
     }
 

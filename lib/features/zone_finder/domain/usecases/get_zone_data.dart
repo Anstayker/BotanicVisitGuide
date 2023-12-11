@@ -17,7 +17,7 @@ class GetZoneData implements UseCase<ZoneData, Params> {
 }
 
 class Params extends Equatable {
-  final int zoneId;
+  final String zoneId;
 
   const Params({required this.zoneId});
 

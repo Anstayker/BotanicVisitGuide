@@ -17,8 +17,8 @@ class ZoneRepositoryImpl implements ZoneRepository {
       ZoneModel zoneModel = ZoneModel.fromEntity(newZone);
       await localDataSource.addZone(zoneModel);
       return Future.value(right(null));
-    } on CacheException {
-      return Future.value(left(CacheException()));
+    } on CacheFailure {
+      return Future.value(left(CacheFailure()));
     }
   }
 
@@ -28,8 +28,8 @@ class ZoneRepositoryImpl implements ZoneRepository {
       final zones = await localDataSource.getAllZones();
       final zoneInfos = zones.map(_mapZoneModelToZoneInfo).toList();
       return right(zoneInfos);
-    } on CacheException {
-      return left(CacheException());
+    } on CacheFailure {
+      return left(CacheFailure());
     }
   }
 

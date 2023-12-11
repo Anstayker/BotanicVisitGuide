@@ -42,7 +42,7 @@ void main() {
 
   test('should return failure when repository fails', () async {
     // arrange
-    final Failure failure = CacheException();
+    final Failure failure = CacheFailure();
     when(() => mockZoneFinderRepository.getAllZonesData())
         .thenAnswer((_) async => Left(failure));
     // act

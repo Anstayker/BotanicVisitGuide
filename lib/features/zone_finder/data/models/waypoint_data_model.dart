@@ -27,4 +27,12 @@ class WaypointDataModel extends WaypointData {
       longitude: waypoint.longitude,
     );
   }
+
+  WaypointData toWaypointData() {
+    return WaypointData(
+      waypointId: waypointId,
+      latitude: latitude,
+      longitude: longitude,
+    );
+  }
 }

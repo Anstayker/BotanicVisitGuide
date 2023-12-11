@@ -60,7 +60,7 @@ void main() {
         // act
         final result = await gpsService.currentPosition;
         // assert
-        expect(result, equals(Left(PermissionException())));
+        expect(result, equals(Left(PermissionFailure())));
       },
     );
   });

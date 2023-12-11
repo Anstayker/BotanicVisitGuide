@@ -39,4 +39,15 @@ class ZoneDataModel {
         "waypoints": List<dynamic>.from(waypoints
             .map((x) => WaypointDataModel.fromWaypointData(x).toJson())),
       };
+
+  // ZoneData toZoneData() {
+  //   return ZoneData(
+  //     zoneId: zoneId,
+  //     zoneName: name,
+  //     zoneDescription: description ?? '',
+  //     waypoints: waypoints
+  //         .map((waypointModel) => waypointModel.toWaypointData())
+  //         .toList(),
+  //   );
+  // }
 }

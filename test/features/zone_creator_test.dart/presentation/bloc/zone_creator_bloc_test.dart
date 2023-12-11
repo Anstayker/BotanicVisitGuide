@@ -85,7 +85,7 @@ void main() {
       () async {
         // arrange
         when(() => mockGetAllZones(any()))
-            .thenAnswer((_) async => Left(CacheException()));
+            .thenAnswer((_) async => Left(CacheFailure()));
         // assert later
         final expected = [
           ZoneLoading(),
