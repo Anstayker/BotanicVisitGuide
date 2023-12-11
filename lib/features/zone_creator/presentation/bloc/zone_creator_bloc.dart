@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
+import '../../../../core/constants/constants.dart';
 import '../../../../core/usecases/usecase.dart';
 import '../../domain/entities/zone_info.dart';
 import '../../domain/usecases/add_zone.dart';
@@ -8,8 +9,6 @@ import '../../domain/usecases/get_all_zones.dart';
 
 part 'zone_creator_event.dart';
 part 'zone_creator_state.dart';
-
-const String cacheFailureMessage = 'Cache Failure';
 
 class ZoneCreatorBloc extends Bloc<ZoneCreatorEvent, ZoneCreatorState> {
   final AddZone addZone;
