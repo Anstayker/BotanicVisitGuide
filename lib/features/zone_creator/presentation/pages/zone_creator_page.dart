@@ -1,8 +1,10 @@
+import 'package:botanic_visit_guide/features/home/presentation/pages/home_page.dart';
 import 'package:flutter/material.dart';
 
 import 'package:dartz/dartz.dart' as dartz;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../../../core/errors/failures.dart';
 import '../../../../core/services/gps_service.dart';
@@ -11,8 +13,6 @@ import '../../domain/entities/waypoint_info.dart';
 import '../../domain/entities/zone_info.dart';
 import '../bloc/bloc.dart';
 import '../widgets/widgets.dart';
-
-import 'zone_visualizer_page.dart';
 
 class ZoneCreatorPage extends StatefulWidget {
   const ZoneCreatorPage({super.key});
@@ -24,10 +24,12 @@ class ZoneCreatorPage extends StatefulWidget {
 class _ZoneCreatorPageState extends State<ZoneCreatorPage> {
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _zoneNameController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
   bool _isExpanded = false;
   final _formKey = GlobalKey<FormState>();
   List<WaypointInfo> _waypointsList = [];
   bool _isFormActive = true;
+  final _uuid = sl<Uuid>();
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +64,7 @@ class _ZoneCreatorPageState extends State<ZoneCreatorPage> {
                     Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(
-                            builder: (_) => const ZoneVisualizerPage()),
+                            builder: (_) => const HomePage()),
                         (Route<dynamic> route) => false);
                   });
                 } else if (state is ZoneAddFailure) {
@@ -121,11 +123,24 @@ class _ZoneCreatorPageState extends State<ZoneCreatorPage> {
             _waypointsExpansionPanel(),
             _formSizedBox(),
             const ZoneCreatorTitle(
-              title: 'Añadir Audio',
+              title: 'Añadir descripción', 
+              verticalPadding: 16.0,),
+            TextField(
+              controller: _descriptionController,
+              enabled: _isFormActive,
+              maxLines: null,
+              minLines: 1,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Descripción',
+              )
+            ),
+            const ZoneCreatorTitle(
+              title: 'Añadir audio',
               verticalPadding: 16.0,
             ),
             const ZoneCreatorTitle(
-              title: 'Añadir Imagenes',
+              title: 'Añadir imagenes',
               verticalPadding: 16.0,
             ),
             _formSizedBox(),
@@ -134,10 +149,10 @@ class _ZoneCreatorPageState extends State<ZoneCreatorPage> {
                 context: context,
                 isFormActive: _isFormActive,
                 newZone: ZoneInfo(
-                  // TODO cambiar a id
-                  zoneId: '1',
+                  zoneId: _uuid.v4().substring(0, 8),
                   name: _zoneNameController.text,
                   waypoints: _waypointsList,
+                  description: _descriptionController.text,
                 )),
           ],
         ),

@@ -56,7 +56,7 @@ class ZoneVisualizerPage extends StatelessWidget {
                           color: Colors.grey[100],
                           child: ExpansionTile(
                             title: Text(state.zones[index].name),
-                            //subtitle: Text('${state.zones[index].zoneId}'),
+                            subtitle: Text(state.zones[index].zoneId),
                             children: state.zones[index].waypoints
                                 .map((waypoint) => Column(
                                       crossAxisAlignment:

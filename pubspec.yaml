@@ -27,6 +27,8 @@ dependencies:
   dcdg: ^4.1.0
   # Geolocator
   geolocator: ^10.1.0
+  # ID generator
+  uuid: ^4.2.1
   
   flutter:
     sdk: flutter

@@ -2,14 +2,13 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../../../core/constants/constants.dart';
 import '../../models/zone_model.dart';
 
 abstract class ZoneCreatorLocalDataSource {
   Future<bool> addZone(ZoneModel newZone);
   Future<List<ZoneModel>> getAllZones();
 }
-
-const cacheZonesList = 'CACHE_ZONES_LIST';
 
 class ZoneCreatorLocalDataSourceImpl implements ZoneCreatorLocalDataSource {
   final SharedPreferences sharedPreferences;

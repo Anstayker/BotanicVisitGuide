@@ -4,6 +4,7 @@ import 'package:botanic_visit_guide/features/zone_finder/domain/repositories/zon
 import 'package:botanic_visit_guide/features/zone_finder/domain/usecases/get_zone_data.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uuid/uuid.dart';
 
 import 'core/services/geolocator_wrapper.dart';
 import 'core/services/gps_service.dart';
@@ -74,5 +75,6 @@ Future<void> init() async {
   final sharedPreferences = await SharedPreferences.getInstance();
   sl.registerLazySingleton(() => sharedPreferences);
   sl.registerLazySingleton(() => GeolocatorWrapper());
+  sl.registerLazySingleton(() => const Uuid());
   // sl.registerLazySingleton(() => DataConnectionChecker());
 }
