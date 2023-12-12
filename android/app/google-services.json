@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1000061938525",
+    "project_id": "botanicvisitguide",
+    "storage_bucket": "botanicvisitguide.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1000061938525:android:88a78e52d5fbfde76f96b4",
+        "android_client_info": {
+          "package_name": "com.example.botanic_visit_guide"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDd0S8Wsfa4DFpv4Im9D-zK7NsLujtdL4E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

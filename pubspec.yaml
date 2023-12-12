@@ -21,6 +21,9 @@ dependencies:
   # Local cache
   shared_preferences: ^2.2.2
   sqflite: ^2.3.0
+  # Firebase
+  firebase_core: "^1.10.0"
+  cloud_firestore: "^3.1.0"
   # Remote API
   internet_connection_checker_plus: ^2.1.0
   # Class Diagram

@@ -1,7 +1,4 @@
-import 'package:botanic_visit_guide/features/zone_finder/data/datasources/zone_finder_local_datasource.dart';
-import 'package:botanic_visit_guide/features/zone_finder/data/repositories/zone_finder_repository_impl.dart';
-import 'package:botanic_visit_guide/features/zone_finder/domain/repositories/zone_finder_repository.dart';
-import 'package:botanic_visit_guide/features/zone_finder/domain/usecases/get_zone_data.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
@@ -14,8 +11,13 @@ import 'features/zone_creator/domain/repositories/zone_repository.dart';
 import 'features/zone_creator/domain/usecases/add_zone.dart';
 import 'features/zone_creator/domain/usecases/get_all_zones.dart';
 import 'features/zone_creator/presentation/bloc/bloc.dart';
+import 'features/zone_finder/data/datasources/zone_finder_local_datasource.dart';
+import 'features/zone_finder/data/repositories/zone_finder_repository_impl.dart';
+import 'features/zone_finder/domain/repositories/zone_finder_repository.dart';
 import 'features/zone_finder/domain/usecases/get_all_zones_data.dart';
+import 'features/zone_finder/domain/usecases/get_zone_data.dart';
 import 'features/zone_finder/presentation/bloc/zone_finder_bloc.dart';
+import 'firebase_options.dart';
 
 final sl = GetIt.instance;
 
@@ -76,5 +78,8 @@ Future<void> init() async {
   sl.registerLazySingleton(() => sharedPreferences);
   sl.registerLazySingleton(() => GeolocatorWrapper());
   sl.registerLazySingleton(() => const Uuid());
+  final firebase = await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform);
+  sl.registerLazySingleton(() => firebase);
   // sl.registerLazySingleton(() => DataConnectionChecker());
 }
