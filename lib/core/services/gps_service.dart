@@ -1,4 +1,4 @@
-import 'package:botanic_visit_guide/core/services/geolocator_wrapper.dart';
+import 'geolocator_wrapper.dart';
 import 'package:dartz/dartz.dart';
 import 'package:geolocator/geolocator.dart';
 

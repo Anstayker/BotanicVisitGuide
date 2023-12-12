@@ -9,8 +9,8 @@ sealed class ZoneFinderEvent extends Equatable {
 
 class GetAllZonesEvent extends ZoneFinderEvent {}
 
-class GetZoneData extends ZoneFinderEvent {
+class GetZoneDataEvent extends ZoneFinderEvent {
   final String zoneId;
 
-  const GetZoneData({required this.zoneId});
+  const GetZoneDataEvent({required this.zoneId});
 }

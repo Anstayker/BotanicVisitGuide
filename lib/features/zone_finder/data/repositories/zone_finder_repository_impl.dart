@@ -1,4 +1,3 @@
-import 'package:botanic_visit_guide/features/zone_finder/data/models/zone_data_model.dart';
 import 'package:dartz/dartz.dart';
 
 import '../../../../core/errors/exceptions.dart' as exception;
@@ -6,11 +5,12 @@ import '../../../../core/errors/failures.dart';
 import '../../domain/entities/zone_data.dart';
 import '../../domain/repositories/zone_finder_repository.dart';
 import '../datasources/zone_finder_local_datasource.dart';
+import '../models/zone_data_model.dart';
 
 class ZoneFinderRepositoryImpl implements ZoneFinderRepository {
   final ZoneFinderLocalDataSource localDataSource;
 
-  ZoneFinderRepositoryImpl(this.localDataSource);
+  ZoneFinderRepositoryImpl({required this.localDataSource});
 
   @override
   Future<Either<Failure, List<ZoneData>>> getAllZonesData() async {

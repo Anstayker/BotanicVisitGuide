@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import '../../domain/entities/waypoint_data.dart';
-
 import 'waypoint_data_model.dart';
 
 List<ZoneDataModel> zoneDataModelFromJson(String str) =>

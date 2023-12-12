@@ -1,3 +1,4 @@
+import '../../../zone_finder/presentation/pages/zone_finder_page.dart';
 import 'package:flutter/material.dart';
 
 import '../../../zone_creator/presentation/pages/zone_visualizer_page.dart';
@@ -24,8 +25,8 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _buildTabView() {
-    return TabBarView(
-      children: [Container(), const ZoneVisualizerPage()],
+    return const TabBarView(
+      children: [ZoneFinderPage(), ZoneVisualizerPage()],
     );
   }
 

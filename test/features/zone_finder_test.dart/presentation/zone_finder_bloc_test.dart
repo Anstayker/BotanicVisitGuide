@@ -11,11 +11,11 @@ import 'package:flutter_test/flutter_test.dart';
 
 class MockGetAllZonesData extends Mock implements GetAllZonesData {}
 
-class MockGetZoneData extends Mock implements GetZoneData {}
+class MockGetZoneData extends Mock implements GetZoneDataEvent {}
 
 void main() {
   late GetAllZonesData getAllZonesData;
-  late GetZoneData getZoneData;
+  late GetZoneDataEvent getZoneData;
   late ZoneFinderBloc bloc;
 
   setUp(() {

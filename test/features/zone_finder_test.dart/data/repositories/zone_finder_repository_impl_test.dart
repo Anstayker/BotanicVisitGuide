@@ -15,7 +15,7 @@ void main() {
 
   setUp(() {
     mockLocalDataSource = MockZoneFinderLocalDataSource();
-    repository = ZoneFinderRepositoryImpl(mockLocalDataSource);
+    repository = ZoneFinderRepositoryImpl(localDataSource: mockLocalDataSource);
   });
 
   group('getAllZonesData', () {
