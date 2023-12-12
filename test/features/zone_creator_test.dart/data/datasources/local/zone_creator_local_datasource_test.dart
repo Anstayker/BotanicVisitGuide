@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:botanic_visit_guide/features/zone_creator/data/datasources/local/zone_creator_local_datasource.dart';
-import 'package:botanic_visit_guide/features/zone_creator/data/models/waypoint_model.dart';
-import 'package:botanic_visit_guide/features/zone_creator/data/models/zone_model.dart';
+import 'package:botanic_visit_guide/features/zone_creator/data/models/waypoint_info_model.dart';
+import 'package:botanic_visit_guide/features/zone_creator/data/models/zone_info_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -24,7 +24,7 @@ void main() {
   group('getAllZones', () {
     final tZoneListJson = fixture('zone_creator_cached.json');
     final tZoneList = (jsonDecode(tZoneListJson) as List)
-        .map((item) => ZoneModel.fromJson(item))
+        .map((item) => ZoneInfoModel.fromJson(item))
         .toList();
 
     test(
@@ -44,9 +44,9 @@ void main() {
 
   group('addZone', () {
     const tWaypoint =
-        WaypointModel(waypointId: '1', latitude: 1.0, longitude: 1.0);
+        WaypointInfoModel(waypointId: '1', latitude: 1.0, longitude: 1.0);
     const tZoneModel =
-        ZoneModel(zoneId: '1', name: 'Zone Name', waypoints: [tWaypoint]);
+        ZoneInfoModel(zoneId: '1', name: 'Zone Name', waypoints: [tWaypoint]);
 
     test(
       "Should add a ZoneModel to the cache",

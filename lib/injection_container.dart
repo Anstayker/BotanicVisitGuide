@@ -1,8 +1,12 @@
+import 'package:botanic_visit_guide/features/zone_creator/data/datasources/remote/zone_creator_remote_datasource.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get_it/get_it.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
+import 'core/network/network_info.dart';
 import 'core/services/geolocator_wrapper.dart';
 import 'core/services/gps_service.dart';
 import 'features/zone_creator/data/datasources/local/zone_creator_local_datasource.dart';
@@ -39,7 +43,8 @@ Future<void> init() async {
   sl.registerLazySingleton<ZoneRepository>(
     () => ZoneRepositoryImpl(
       localDataSource: sl(),
-      //networkInfo: sl(),
+      remoteDatasource: sl(),
+      networkInfo: sl(),
     ),
   );
 
@@ -47,6 +52,8 @@ Future<void> init() async {
   sl.registerLazySingleton<ZoneCreatorLocalDataSource>(
     () => ZoneCreatorLocalDataSourceImpl(sharedPreferences: sl()),
   );
+  sl.registerLazySingleton<ZoneCreatorRemoteDatasource>(
+      () => ZoneCreatorRemoteDatasourceImpl(firestore: sl()));
 
   //! Features - Zone Finder
   // Bloc
@@ -70,7 +77,7 @@ Future<void> init() async {
       () => ZoneFinderLocalDataSourceImpl(sharedPreferences: sl()));
 
   //! Core
-  // sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
+  sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
   sl.registerLazySingleton<GpsService>(() => GpsServiceImpl(geolocator: sl()));
 
   //! External
@@ -81,5 +88,6 @@ Future<void> init() async {
   final firebase = await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform);
   sl.registerLazySingleton(() => firebase);
-  // sl.registerLazySingleton(() => DataConnectionChecker());
+  sl.registerLazySingleton(() => FirebaseFirestore.instance);
+  sl.registerLazySingleton(() => InternetConnection());
 }

@@ -3,11 +3,11 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../core/constants/constants.dart';
-import '../../models/zone_model.dart';
+import '../../models/zone_info_model.dart';
 
 abstract class ZoneCreatorLocalDataSource {
-  Future<bool> addZone(ZoneModel newZone);
-  Future<List<ZoneModel>> getAllZones();
+  Future<bool> addZone(ZoneInfoModel newZone);
+  Future<List<ZoneInfoModel>> getAllZones();
 }
 
 class ZoneCreatorLocalDataSourceImpl implements ZoneCreatorLocalDataSource {
@@ -16,7 +16,7 @@ class ZoneCreatorLocalDataSourceImpl implements ZoneCreatorLocalDataSource {
   ZoneCreatorLocalDataSourceImpl({required this.sharedPreferences});
 
   @override
-  Future<bool> addZone(ZoneModel newZone) async {
+  Future<bool> addZone(ZoneInfoModel newZone) async {
     List<String> zonesInJson = [];
     final currentZones = await getAllZones();
     currentZones.add(newZone);
@@ -28,10 +28,10 @@ class ZoneCreatorLocalDataSourceImpl implements ZoneCreatorLocalDataSource {
   }
 
   @override
-  Future<List<ZoneModel>> getAllZones() {
+  Future<List<ZoneInfoModel>> getAllZones() {
     final jsonString = sharedPreferences.getString(cacheZonesList);
     if (jsonString != null) {
-      List<ZoneModel> zones = zoneModelFromJson(jsonString);
+      List<ZoneInfoModel> zones = zoneModelFromJson(jsonString);
       return Future.value(zones);
     } else {
       return Future(() => []);

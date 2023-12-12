@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:botanic_visit_guide/features/zone_creator/data/models/waypoint_model.dart';
-import 'package:botanic_visit_guide/features/zone_creator/data/models/zone_model.dart';
+import 'package:botanic_visit_guide/features/zone_creator/data/models/waypoint_info_model.dart';
+import 'package:botanic_visit_guide/features/zone_creator/data/models/zone_info_model.dart';
 import 'package:botanic_visit_guide/features/zone_creator/domain/entities/zone_info.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -9,9 +9,9 @@ import '../../../../fixtures/fixture_reader.dart';
 
 void main() {
   const tWaypointModel =
-      WaypointModel(waypointId: '1', latitude: 1.0, longitude: 1.0);
+      WaypointInfoModel(waypointId: '1', latitude: 1.0, longitude: 1.0);
   const tZoneModel =
-      ZoneModel(zoneId: '1', name: 'name', waypoints: [tWaypointModel]);
+      ZoneInfoModel(zoneId: '1', name: 'name', waypoints: [tWaypointModel]);
   const tZoneInfo =
       ZoneInfo(zoneId: '1', name: 'name', waypoints: [tWaypointModel]);
   final tMap = {
@@ -39,7 +39,7 @@ void main() {
   test(
     "should be able to convert a Map to a ZoneModel",
     () async {
-      final result = ZoneModel.fromMap(tMap);
+      final result = ZoneInfoModel.fromMap(tMap);
       expect(result, tZoneInfo);
     },
   );
@@ -49,7 +49,7 @@ void main() {
     () async {
       // act
       final zoneJson = json.decode(fixture('zone_example.json'));
-      final result = ZoneModel.fromJson(zoneJson[0]);
+      final result = ZoneInfoModel.fromJson(zoneJson[0]);
       // assert
       expect(result.zoneId, tZoneModel.zoneId);
       expect(result.name, tZoneModel.name);
