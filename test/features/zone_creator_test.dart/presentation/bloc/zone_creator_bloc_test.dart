@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 import 'package:botanic_visit_guide/core/usecases/usecase.dart';
-import 'package:botanic_visit_guide/features/zone_creator/domain/entities/waypoint.dart';
+import 'package:botanic_visit_guide/features/zone_creator/domain/entities/waypoint_info.dart';
 import 'package:botanic_visit_guide/features/zone_creator/domain/entities/zone_info.dart';
 import 'package:botanic_visit_guide/features/zone_creator/domain/usecases/add_zone.dart';
 import 'package:botanic_visit_guide/features/zone_creator/domain/usecases/get_all_zones.dart';
@@ -23,8 +23,8 @@ void main() {
   setUp(() {
     registerFallbackValue(NoParams());
     registerFallbackValue(const Params(
-        zone: ZoneInfo(zoneId: 1, name: 'Zone', waypoints: [
-      Waypoint(waypointId: 1, latitude: 1.0, longitude: 1.0)
+        zone: ZoneInfo(zoneId: '1', name: 'Zone', waypoints: [
+      WaypointInfo(waypointId: '1', latitude: 1.0, longitude: 1.0)
     ])));
     mockGetAllZones = MockGetAllZones();
     mockAddZone = MockAddZone();
@@ -43,11 +43,11 @@ void main() {
   );
 
   group('GetAllZones', () {
-    const tWaypoints = Waypoint(waypointId: 1, latitude: 1.0, longitude: 1.0);
+    const tWaypoints = WaypointInfo(waypointId: '1', latitude: 1.0, longitude: 1.0);
 
     const tZones = [
-      ZoneInfo(zoneId: 1, name: 'Zone 1', waypoints: [tWaypoints]),
-      ZoneInfo(zoneId: 2, name: 'Zone 2', waypoints: [tWaypoints]),
+      ZoneInfo(zoneId: '1', name: 'Zone 1', waypoints: [tWaypoints]),
+      ZoneInfo(zoneId: '2', name: 'Zone 2', waypoints: [tWaypoints]),
     ];
 
     test(
@@ -100,8 +100,8 @@ void main() {
   });
 
   group('AddZone', () {
-    const tWaypoints = Waypoint(waypointId: 1, latitude: 1.0, longitude: 1.0);
-    const tZone = ZoneInfo(zoneId: 1, name: 'Zone 1', waypoints: [tWaypoints]);
+    const tWaypoints = WaypointInfo(waypointId: '1', latitude: 1.0, longitude: 1.0);
+    const tZone = ZoneInfo(zoneId: '1', name: 'Zone 1', waypoints: [tWaypoints]);
     test(
       "should add a new Zone in the add new zone use case",
       () async {

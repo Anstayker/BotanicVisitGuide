@@ -9,13 +9,13 @@ import '../../../../fixtures/fixture_reader.dart';
 
 void main() {
   const tWaypointModel =
-      WaypointModel(waypointId: 1, latitude: 1.0, longitude: 1.0);
+      WaypointModel(waypointId: '1', latitude: 1.0, longitude: 1.0);
   const tZoneModel =
-      ZoneModel(zoneId: 1, name: 'name', waypoints: [tWaypointModel]);
+      ZoneModel(zoneId: '1', name: 'name', waypoints: [tWaypointModel]);
   const tZoneInfo =
-      ZoneInfo(zoneId: 1, name: 'name', waypoints: [tWaypointModel]);
+      ZoneInfo(zoneId: '1', name: 'name', waypoints: [tWaypointModel]);
   final tMap = {
-    'zoneId': 1,
+    'zoneId': '1',
     'name': 'name',
     'waypoints': [tWaypointModel],
   };

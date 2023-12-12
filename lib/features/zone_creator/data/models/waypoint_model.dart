@@ -1,6 +1,6 @@
-import '../../domain/entities/waypoint.dart';
+import '../../domain/entities/waypoint_info.dart';
 
-class WaypointModel extends Waypoint {
+class WaypointModel extends WaypointInfo {
   const WaypointModel(
       {required waypointId, required latitude, required longitude})
       : super(waypointId: waypointId, latitude: latitude, longitude: longitude);
@@ -21,7 +21,7 @@ class WaypointModel extends Waypoint {
     };
   }
 
-  static WaypointModel fromWaypoint(Waypoint waypoint) {
+  static WaypointModel fromWaypoint(WaypointInfo waypoint) {
     return WaypointModel(
       waypointId: waypoint.waypointId,
       latitude: waypoint.latitude,
@@ -29,7 +29,7 @@ class WaypointModel extends Waypoint {
     );
   }
 
-  factory WaypointModel.fromEntity(Waypoint entity) {
+  factory WaypointModel.fromEntity(WaypointInfo entity) {
     return WaypointModel(
       waypointId: entity.waypointId,
       latitude: entity.latitude,

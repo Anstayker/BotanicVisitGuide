@@ -44,9 +44,9 @@ void main() {
 
   group('addZone', () {
     const tWaypoint =
-        WaypointModel(waypointId: 1, latitude: 1.0, longitude: 1.0);
+        WaypointModel(waypointId: '1', latitude: 1.0, longitude: 1.0);
     const tZoneModel =
-        ZoneModel(zoneId: 1, name: 'Zone Name', waypoints: [tWaypoint]);
+        ZoneModel(zoneId: '1', name: 'Zone Name', waypoints: [tWaypoint]);
 
     test(
       "Should add a ZoneModel to the cache",

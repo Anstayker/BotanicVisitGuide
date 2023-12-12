@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-import '../../domain/entities/waypoint.dart';
+import '../../domain/entities/waypoint_info.dart';
 
 class WaypointsCard extends StatelessWidget {
   const WaypointsCard({
     super.key,
-    required List<Waypoint> waypointsList,
+    required List<WaypointInfo> waypointsList,
     required this.index,
   }) : _waypointsList = waypointsList;
 
-  final List<Waypoint> _waypointsList;
+  final List<WaypointInfo> _waypointsList;
   final int index;
 
   @override

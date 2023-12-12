@@ -2,7 +2,7 @@ import 'package:botanic_visit_guide/core/errors/failures.dart';
 import 'package:botanic_visit_guide/features/zone_creator/data/datasources/local/zone_creator_local_datasource.dart';
 import 'package:botanic_visit_guide/features/zone_creator/data/models/zone_model.dart';
 import 'package:botanic_visit_guide/features/zone_creator/data/repositories/zone_repository_impl.dart';
-import 'package:botanic_visit_guide/features/zone_creator/domain/entities/waypoint.dart';
+import 'package:botanic_visit_guide/features/zone_creator/domain/entities/waypoint_info.dart';
 import 'package:botanic_visit_guide/features/zone_creator/domain/entities/zone_info.dart';
 
 import 'package:dartz/dartz.dart';
@@ -21,9 +21,9 @@ void main() {
   });
 
   group('getAllZones', () {
-    const tWaypoint = Waypoint(waypointId: 1, latitude: 1.0, longitude: 1.0);
+    const tWaypoint = WaypointInfo(waypointId: '1', latitude: 1.0, longitude: 1.0);
     final tZoneModeList = [
-      const ZoneModel(zoneId: 1, name: 'Zone 1', waypoints: [tWaypoint])
+      const ZoneModel(zoneId: '1', name: 'Zone 1', waypoints: [tWaypoint])
     ];
     final tZoneInfoList = tZoneModeList
         .map((e) =>
@@ -60,9 +60,9 @@ void main() {
   });
 
   group('addZone', () {
-    const tWaypoint = Waypoint(waypointId: 1, latitude: 1.0, longitude: 1.0);
+    const tWaypoint = WaypointInfo(waypointId: '1', latitude: 1.0, longitude: 1.0);
     const tZoneInfo =
-        ZoneInfo(zoneId: 1, name: 'Zone 1', waypoints: [tWaypoint]);
+        ZoneInfo(zoneId: '1', name: 'Zone 1', waypoints: [tWaypoint]);
 
     final tZoneModel = ZoneModel.fromEntity(tZoneInfo);
 

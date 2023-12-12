@@ -1,4 +1,4 @@
-import 'package:botanic_visit_guide/features/zone_creator/domain/entities/waypoint.dart';
+import 'package:botanic_visit_guide/features/zone_creator/domain/entities/waypoint_info.dart';
 import 'package:botanic_visit_guide/features/zone_creator/domain/entities/zone_info.dart';
 import 'package:botanic_visit_guide/features/zone_creator/domain/repositories/zone_repository.dart';
 import 'package:botanic_visit_guide/features/zone_creator/domain/usecases/add_zone.dart';
@@ -18,9 +18,9 @@ void main() {
     addZone = AddZone(mockZoneRepository);
   });
 
-  const tWaypoiont = Waypoint(waypointId: 1, latitude: 1.0, longitude: 1.0);
+  const tWaypoiont = WaypointInfo(waypointId: '1', latitude: 1.0, longitude: 1.0);
   const tZoneInfo =
-      ZoneInfo(zoneId: 1, name: 'Zona 1', waypoints: [tWaypoiont]);
+      ZoneInfo(zoneId: '1', name: 'Zona 1', waypoints: [tWaypoiont]);
 
   test(
     "should add a zone to the repository",

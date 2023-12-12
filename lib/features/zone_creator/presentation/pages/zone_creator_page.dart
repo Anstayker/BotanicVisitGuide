@@ -7,7 +7,7 @@ import 'package:geolocator/geolocator.dart';
 import '../../../../core/errors/failures.dart';
 import '../../../../core/services/gps_service.dart';
 import '../../../../injection_container.dart';
-import '../../domain/entities/waypoint.dart';
+import '../../domain/entities/waypoint_info.dart';
 import '../../domain/entities/zone_info.dart';
 import '../bloc/bloc.dart';
 import '../widgets/widgets.dart';
@@ -26,7 +26,7 @@ class _ZoneCreatorPageState extends State<ZoneCreatorPage> {
   final TextEditingController _zoneNameController = TextEditingController();
   bool _isExpanded = false;
   final _formKey = GlobalKey<FormState>();
-  List<Waypoint> _waypointsList = [];
+  List<WaypointInfo> _waypointsList = [];
   bool _isFormActive = true;
 
   @override
@@ -135,7 +135,7 @@ class _ZoneCreatorPageState extends State<ZoneCreatorPage> {
                 isFormActive: _isFormActive,
                 newZone: ZoneInfo(
                   // TODO cambiar a id
-                  zoneId: 1,
+                  zoneId: '1',
                   name: _zoneNameController.text,
                   waypoints: _waypointsList,
                 )),
@@ -179,13 +179,13 @@ class _ZoneCreatorPageState extends State<ZoneCreatorPage> {
           return Dismissible(
             key: UniqueKey(),
             onDismissed: (direction) {
-              List<Waypoint> newList = List.from(_waypointsList);
+              List<WaypointInfo> newList = List.from(_waypointsList);
               newList.removeAt(index);
               newList = newList.asMap().entries.map((entry) {
                 int newIndex = entry.key;
-                Waypoint oldWaypoint = entry.value;
-                return Waypoint(
-                  waypointId: newIndex + 1,
+                WaypointInfo oldWaypoint = entry.value;
+                return WaypointInfo(
+                  waypointId: "${newIndex + 1}",
                   latitude: oldWaypoint.latitude,
                   longitude: oldWaypoint.longitude,
                 );
@@ -214,8 +214,8 @@ class _ZoneCreatorPageState extends State<ZoneCreatorPage> {
                 position.fold(
                     // TODO implement error message
                     (l) => print('error'),
-                    (r) => _waypointsList.add(Waypoint(
-                        waypointId: _waypointsList.length + 1,
+                    (r) => _waypointsList.add(WaypointInfo(
+                        waypointId: "${_waypointsList.length + 1}",
                         latitude: r.latitude,
                         longitude: r.longitude)));
 

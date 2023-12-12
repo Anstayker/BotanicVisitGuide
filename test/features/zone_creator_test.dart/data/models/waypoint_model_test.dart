@@ -1,5 +1,5 @@
 import 'package:botanic_visit_guide/features/zone_creator/data/models/waypoint_model.dart';
-import 'package:botanic_visit_guide/features/zone_creator/domain/entities/waypoint.dart';
+import 'package:botanic_visit_guide/features/zone_creator/domain/entities/waypoint_info.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'dart:convert';
@@ -7,13 +7,13 @@ import '../../../../fixtures/fixture_reader.dart';
 
 void main() {
   const tWaypointModel =
-      WaypointModel(waypointId: 1, latitude: 1.0, longitude: 1.0);
+      WaypointModel(waypointId: '1', latitude: 1.0, longitude: 1.0);
 
   test(
     "should be a subclass of Waypoint entity",
     () async {
       // assert
-      expect(tWaypointModel, isA<Waypoint>());
+      expect(tWaypointModel, isA<WaypointInfo>());
     },
   );
 
