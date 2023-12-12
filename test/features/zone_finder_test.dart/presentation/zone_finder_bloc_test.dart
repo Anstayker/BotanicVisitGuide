@@ -4,6 +4,7 @@ import 'package:botanic_visit_guide/core/usecases/usecase.dart';
 import 'package:botanic_visit_guide/features/zone_finder/domain/entities/waypoint_data.dart';
 import 'package:botanic_visit_guide/features/zone_finder/domain/entities/zone_data.dart';
 import 'package:botanic_visit_guide/features/zone_finder/domain/usecases/get_all_zones_data.dart';
+import 'package:botanic_visit_guide/features/zone_finder/domain/usecases/get_zone_data.dart';
 import 'package:botanic_visit_guide/features/zone_finder/presentation/bloc/zone_finder_bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:mocktail/mocktail.dart';
@@ -11,11 +12,11 @@ import 'package:flutter_test/flutter_test.dart';
 
 class MockGetAllZonesData extends Mock implements GetAllZonesData {}
 
-class MockGetZoneData extends Mock implements GetZoneDataEvent {}
+class MockGetZoneData extends Mock implements GetZoneData {}
 
 void main() {
   late GetAllZonesData getAllZonesData;
-  late GetZoneDataEvent getZoneData;
+  late GetZoneData getZoneData;
   late ZoneFinderBloc bloc;
 
   setUp(() {

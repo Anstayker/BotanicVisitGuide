@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/widgets/title_text.dart';
 import '../../../../injection_container.dart';
+import '../../domain/entities/zone_data.dart';
 import '../bloc/zone_finder_bloc.dart';
 import '../widgets/widgets.dart';
 
@@ -16,48 +16,117 @@ class ZoneFinderPage extends StatelessWidget {
   }
 
   BlocProvider<ZoneFinderBloc> buildBody(BuildContext context) {
-    return BlocProvider<ZoneFinderBloc>(
-      create: (_) => sl<ZoneFinderBloc>(),
-      child: CustomScrollView(
-        slivers: <Widget>[
-          const SliverToBoxAdapter(
-            child:
-                TitleText(title: 'Zona activa', iconData: Icons.notifications),
-          ),
-          _activeZoneCardList(),
-          const SliverToBoxAdapter(
-            child:
-                TitleText(title: 'Zonas encontradas', iconData: Icons.search),
-          ),
-          _zoneFoundCardList(),
-        ],
-      ),
-    );
-  }
+    List<ZoneData> zonesFound = [];
+    List<ZoneData> zonesActive = [];
 
-  SliverList _zoneFoundCardList() {
-    return SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (BuildContext context, int index) {
-          return ZoneFoundCard(
-            zoneName: 'zoneName',
-            zoneDescription: 'zoneDescription',
-            context: context,
+    return BlocProvider(
+      create: (_) => sl<ZoneFinderBloc>(),
+      child: BlocBuilder<ZoneFinderBloc, ZoneFinderState>(
+        builder: (context, state) {
+          if (state is ZoneFinderInitial) {
+            // ! COMMENT FOR TESTING PURPOSES
+            BlocProvider.of<ZoneFinderBloc>(context).add(GetAllZonesEvent());
+          }
+          if (state is ZonesLoadSuccess) {
+            // TODO order zones
+            // _zonesFound = state.zonesFound;
+            // _zonesActive = state.zonesActive;
+          }
+          return CustomScrollView(
+            slivers: <Widget>[
+              const SliverToBoxAdapter(
+                child: TitleText(
+                  title: 'Zona activa',
+                  iconData: Icons.notifications,
+                  verticalPadding: 16.0,
+                  horizontalPadding: 16.0,
+                ),
+              ),
+              if (state is ZonesLoadSuccess) ...[
+                _activeZoneCardList(zonesActive),
+              ] else if (state is ZonesLoadFailure) ...[
+                // TODO implement failure
+              ] else ...[
+                _sliverCircularProgressIndicator(),
+              ],
+              const SliverToBoxAdapter(
+                child: TitleText(
+                  title: 'Zonas encontradas',
+                  iconData: Icons.search,
+                  verticalPadding: 16.0,
+                  horizontalPadding: 16.0,
+                ),
+              ),
+              if (state is ZonesLoadSuccess) ...[
+                _zoneFoundCardList(zonesFound),
+              ] else if (state is ZonesLoadFailure) ...[
+                // TODO implement failure
+              ] else ...[
+                _sliverCircularProgressIndicator(),
+              ]
+            ],
           );
         },
-        childCount: 100,
       ),
     );
   }
 
-  SliverList _activeZoneCardList() {
-    return SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (BuildContext context, int index) {
-          return ActiveZoneCard(context: context);
-        },
-        childCount: 2,
+  Widget _activeZoneCardList(List<ZoneData> zonesActive) {
+    if (zonesActive.isEmpty) {
+      return const SliverToBoxAdapter(
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 36.0),
+          child: Center(
+            child: Text('No hay zonas activas'),
+          ),
+        ),
+      );
+    } else {
+      return SliverList(
+        delegate: SliverChildBuilderDelegate(
+          (BuildContext context, int index) {
+            return ActiveZoneCard(context: context);
+          },
+          childCount: 2,
+        ),
+      );
+    }
+  }
+
+  SliverToBoxAdapter _sliverCircularProgressIndicator() {
+    return const SliverToBoxAdapter(
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 36.0),
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
       ),
     );
+  }
+
+  Widget _zoneFoundCardList(List<ZoneData> zonesFound) {
+    if (zonesFound.isEmpty) {
+      return const SliverToBoxAdapter(
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 36.0),
+          child: Center(
+            child: Text('No hay zonas encontradas'),
+          ),
+        ),
+      );
+    } else {
+      return SliverList(
+        delegate: SliverChildBuilderDelegate(
+          (BuildContext context, int index) {
+            return ZoneFoundCard(
+              zoneName: 'zoneName',
+              zoneDescription: 'zoneDescription',
+              context: context,
+            );
+          },
+          childCount: 100,
+        ),
+      );
+    }
   }
 }

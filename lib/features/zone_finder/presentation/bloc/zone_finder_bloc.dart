@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:botanic_visit_guide/features/zone_finder/domain/usecases/get_zone_data.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../../../core/constants/constants.dart';
@@ -11,7 +12,8 @@ part 'zone_finder_state.dart';
 
 class ZoneFinderBloc extends Bloc<ZoneFinderEvent, ZoneFinderState> {
   final GetAllZonesData getAllZonesData;
-  final GetZoneDataEvent getZoneData;
+  final GetZoneData
+   getZoneData;
 
   ZoneFinderBloc({
     required this.getAllZonesData,
