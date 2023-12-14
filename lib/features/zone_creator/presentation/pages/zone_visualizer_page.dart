@@ -1,3 +1,4 @@
+import 'package:botanic_visit_guide/features/zone_creator/presentation/pages/zone_map_view_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -54,34 +55,7 @@ class ZoneVisualizerPage extends StatelessWidget {
                         return Card(
                           // TODO Color should be in theme data
                           color: Colors.grey[100],
-                          child: ExpansionTile(
-                            title: Text(state.zones[index].name),
-                            subtitle: Text(state.zones[index].zoneId),
-                            children: state.zones[index].waypoints
-                                .map((waypoint) => Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                            'Wayppoint: ${waypoint.waypointId}'),
-                                        const Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 8.0),
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
-                                          children: [
-                                            Text(
-                                                'Latitud: ${waypoint.latitude}'),
-                                            Text(
-                                                'Loingutd: ${waypoint.longitude}'),
-                                          ],
-                                        ),
-                                      ],
-                                    ))
-                                .toList(),
-                          ),
+                          child: _expansionTileZones(state, index, context),
                         );
                       }),
                 );
@@ -93,6 +67,58 @@ class ZoneVisualizerPage extends StatelessWidget {
           )
         ],
       ),
+    );
+  }
+
+  ExpansionTile _expansionTileZones(
+      ZoneLoadSuccess state, int index, BuildContext context) {
+    return ExpansionTile(
+      title: Text(state.zones[index].name),
+      subtitle: Text(state.zones[index].zoneId),
+      children: state.zones[index].waypoints
+          .map(
+            (waypoint) => Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Wayppoint: ${waypoint.waypointId}'),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 8.0),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Flexible(child: Text('Latitud: ${waypoint.latitude}')),
+                        Flexible(
+                            child: Text('Longitud: ${waypoint.longitude}')),
+                      ],
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MapView(
+                                waypointsData: state.zones[index]
+                                    .waypoints, // Reemplaza esto con tu lista de waypoints// Reemplaza esto con tu posición actual
+                              ),
+                            ),
+                          );
+                        },
+                        child: Text('Mapa')),
+                  ],
+                ),
+              ],
+            ),
+          )
+          .toList(),
     );
   }
 }

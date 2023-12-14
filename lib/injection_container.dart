@@ -101,5 +101,5 @@ Future<void> init() async {
   sl.registerLazySingleton(() => firebase);
   sl.registerLazySingleton(() => FirebaseFirestore.instance);
   sl.registerLazySingleton(() => FirebaseStorage.instance);
-  sl.registerLazySingleton(() => InternetConnection());
+  sl.registerLazySingleton(() => InternetConnectionCheckerPlus());
 }
