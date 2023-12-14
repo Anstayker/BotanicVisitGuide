@@ -15,8 +15,13 @@ class ZonesLoading extends ZoneFinderState {}
 
 class ZonesLoadSuccess extends ZoneFinderState {
   final List<ZoneData> zones;
+  final List<ZoneData> zonesFound;
+  final List<ZoneData> zonesActive;
 
-  const ZonesLoadSuccess({required this.zones});
+  const ZonesLoadSuccess(
+      {required this.zones,
+      required this.zonesFound,
+      required this.zonesActive});
 }
 
 class ZonesLoadFailure extends ZoneFinderState {

@@ -1,15 +1,17 @@
+import 'package:botanic_visit_guide/features/zone_finder/domain/entities/zone_data.dart';
 import 'package:flutter/material.dart';
+
+import '../../../../config/routes/app_routes.dart';
+import '../pages/zone_finder_details.dart';
 
 class ZoneFoundCard extends StatelessWidget {
   const ZoneFoundCard({
     super.key,
-    required this.zoneName,
-    required this.zoneDescription,
     required this.context,
+    required this.zoneData,
   });
 
-  final String zoneName;
-  final String zoneDescription;
+  final ZoneData zoneData;
   final BuildContext context;
 
   @override
@@ -21,17 +23,20 @@ class ZoneFoundCard extends StatelessWidget {
         child: ListTile(
           leading: const Icon(Icons.forest, color: Colors.grey),
           title: Text(
-            zoneName,
+            zoneData.zoneName,
             overflow: TextOverflow.ellipsis,
             maxLines: 1,
           ),
           subtitle: Text(
-            zoneDescription,
+            zoneData.zoneDescription ?? '',
             overflow: TextOverflow.ellipsis,
             maxLines: 2,
           ),
           trailing: const Icon(Icons.arrow_forward_ios),
-          onTap: () {},
+          onTap: () {
+            Navigator.pushNamed(context, AppRoutes.zoneFinderDetails,
+                arguments: ZoneFinderDetailsArgs(zoneData: zoneData));
+          },
         ),
       ),
     );

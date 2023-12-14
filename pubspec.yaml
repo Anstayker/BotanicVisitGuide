@@ -37,6 +37,9 @@ dependencies:
   # Image picker
   path: ^1.8.0
   image_picker: ^1.0.5
+  # Maps
+  flutter_map: ^6.1.0
+  latlong2: ^0.9.0
   
   flutter:
     sdk: flutter

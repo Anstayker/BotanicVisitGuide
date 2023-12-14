@@ -1,27 +1,35 @@
+import 'package:botanic_visit_guide/config/routes/app_routes.dart';
+import 'package:botanic_visit_guide/features/zone_finder/presentation/pages/zone_finder_details.dart';
 import 'package:flutter/material.dart';
+
+import '../../domain/entities/zone_data.dart';
 
 class ActiveZoneCard extends StatelessWidget {
   const ActiveZoneCard({
     super.key,
     required this.context,
-    required this.title,
-    this.subtitle,
+    required this.zoneData,
   });
 
   final BuildContext context;
-  final String title;
-  final String? subtitle;
+  final ZoneData zoneData;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          Navigator.pushNamed(
+            context,
+            AppRoutes.zoneFinderDetails,
+            arguments: ZoneFinderDetailsArgs(zoneData: zoneData),
+          );
+        },
         child: Card(
           color: Colors.grey[100],
           child: Padding(
-            padding: EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16.0),
             child: Row(
               children: [
                 const Icon(
@@ -35,12 +43,16 @@ class ActiveZoneCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        title,
+                        zoneData.zoneName,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
                         style: const TextStyle(
                             fontSize: 24, fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        subtitle ?? '',
+                        zoneData.zoneDescription ?? '',
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
                         style: const TextStyle(fontSize: 16),
                       ),
                     ],

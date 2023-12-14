@@ -2,10 +2,16 @@ import 'package:flutter/material.dart';
 
 import '../../domain/entities/zone_data.dart';
 
-class ZoneFinderDetailsPage extends StatefulWidget {
-  const ZoneFinderDetailsPage({super.key, required this.zoneData});
-
+class ZoneFinderDetailsArgs {
   final ZoneData zoneData;
+
+  ZoneFinderDetailsArgs({required this.zoneData});
+}
+
+class ZoneFinderDetailsPage extends StatefulWidget {
+  const ZoneFinderDetailsPage({super.key, required this.args});
+
+  final ZoneFinderDetailsArgs args;
 
   @override
   State<ZoneFinderDetailsPage> createState() => _ZoneFinderDetailsPageState();
@@ -16,6 +22,8 @@ class _ZoneFinderDetailsPageState extends State<ZoneFinderDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final zoneData = widget.args.zoneData;
+
     final List<IconData> icons = [
       Icons.forest,
       Icons.forest_rounded,
@@ -28,8 +36,7 @@ class _ZoneFinderDetailsPageState extends State<ZoneFinderDetailsPage> {
       Colors.red,
     ];
 
-    const String notificationLongText =
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
+    String notificationLongText = '${zoneData.zoneDescription}';
 
     return Scaffold(
       appBar: AppBar(

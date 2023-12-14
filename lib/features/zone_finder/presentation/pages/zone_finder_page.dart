@@ -24,13 +24,12 @@ class ZoneFinderPage extends StatelessWidget {
       child: BlocBuilder<ZoneFinderBloc, ZoneFinderState>(
         builder: (context, state) {
           if (state is ZoneFinderInitial) {
-            // ! COMMENT FOR TESTING PURPOSES
             BlocProvider.of<ZoneFinderBloc>(context).add(GetAllZonesEvent());
           }
           if (state is ZonesLoadSuccess) {
             // TODO order zones
-            zonesFound = state.zones;
-            //zonesActive = state.zones;
+            zonesFound = state.zonesFound;
+            zonesActive = state.zonesActive;
           }
           return CustomScrollView(
             slivers: <Widget>[
@@ -86,9 +85,7 @@ class ZoneFinderPage extends StatelessWidget {
         delegate: SliverChildBuilderDelegate(
           (BuildContext context, int index) {
             return ActiveZoneCard(
-                context: context,
-                title: zonesActive[index].zoneName,
-                subtitle: zonesActive[index].zoneDescription);
+                context: context, zoneData: zonesActive[index]);
           },
           childCount: zonesActive.length,
         ),
@@ -122,8 +119,7 @@ class ZoneFinderPage extends StatelessWidget {
         delegate: SliverChildBuilderDelegate(
           (BuildContext context, int index) {
             return ZoneFoundCard(
-              zoneName: zonesFound[index].zoneName,
-              zoneDescription: zonesFound[index].zoneDescription ?? '',
+              zoneData: zonesFound[index],
               context: context,
             );
           },

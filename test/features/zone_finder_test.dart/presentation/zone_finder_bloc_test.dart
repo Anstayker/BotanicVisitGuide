@@ -6,6 +6,7 @@ import 'package:botanic_visit_guide/features/zone_finder/domain/entities/zone_da
 import 'package:botanic_visit_guide/features/zone_finder/domain/usecases/get_all_zones_data.dart';
 import 'package:botanic_visit_guide/features/zone_finder/domain/usecases/get_zone_data.dart';
 import 'package:botanic_visit_guide/features/zone_finder/presentation/bloc/zone_finder_bloc.dart';
+import 'package:botanic_visit_guide/features/zone_finder/presentation/utils/zone_finder_gps_utils.dart';
 import 'package:dartz/dartz.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -14,18 +15,23 @@ class MockGetAllZonesData extends Mock implements GetAllZonesData {}
 
 class MockGetZoneData extends Mock implements GetZoneData {}
 
+class MockGPSUtils extends Mock implements ZoneFinderGPSUtils {}
+
 void main() {
   late GetAllZonesData getAllZonesData;
   late GetZoneData getZoneData;
   late ZoneFinderBloc bloc;
+  late ZoneFinderGPSUtils gpsUtils;
 
   setUp(() {
     registerFallbackValue(NoParams());
     getAllZonesData = MockGetAllZonesData();
     getZoneData = MockGetZoneData();
+    gpsUtils = MockGPSUtils();
     bloc = ZoneFinderBloc(
       getAllZonesData: getAllZonesData,
       getZoneData: getZoneData,
+      gpsUtils: gpsUtils,
     );
   });
 
@@ -58,6 +64,10 @@ void main() {
         // arrange
         when(() => getAllZonesData(any()))
             .thenAnswer((_) async => const Right(tZones));
+        when(() => gpsUtils.getActiveZones(any()))
+            .thenAnswer((_) async => tZones);
+        when(() => gpsUtils.getFoundZones(any()))
+            .thenAnswer((_) async => tZones);
         // act
         bloc.add(GetAllZonesEvent());
         await untilCalled(() => getAllZonesData(any()));
@@ -72,10 +82,15 @@ void main() {
         // arrange
         when(() => getAllZonesData(any()))
             .thenAnswer((_) async => const Right(tZones));
+        when(() => gpsUtils.getActiveZones(any()))
+            .thenAnswer((_) async => tZones);
+        when(() => gpsUtils.getFoundZones(any()))
+            .thenAnswer((_) async => tZones);
         // assert later
         final expected = [
           ZonesLoading(),
-          const ZonesLoadSuccess(zones: tZones),
+          const ZonesLoadSuccess(
+              zones: tZones, zonesActive: tZones, zonesFound: tZones),
         ];
         expectLater(bloc.stream, emitsInOrder(expected));
         // act

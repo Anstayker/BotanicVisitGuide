@@ -1,5 +1,3 @@
-import 'package:botanic_visit_guide/features/zone_creator/data/datasources/remote/zone_creator_remote_datasource.dart';
-import 'package:botanic_visit_guide/features/zone_finder/data/datasources/zone_finder_remote_datasource.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -12,17 +10,20 @@ import 'core/network/network_info.dart';
 import 'core/services/geolocator_wrapper.dart';
 import 'core/services/gps_service.dart';
 import 'features/zone_creator/data/datasources/local/zone_creator_local_datasource.dart';
+import 'features/zone_creator/data/datasources/remote/zone_creator_remote_datasource.dart';
 import 'features/zone_creator/data/repositories/zone_repository_impl.dart';
 import 'features/zone_creator/domain/repositories/zone_repository.dart';
 import 'features/zone_creator/domain/usecases/add_zone.dart';
 import 'features/zone_creator/domain/usecases/get_all_zones.dart';
 import 'features/zone_creator/presentation/bloc/bloc.dart';
 import 'features/zone_finder/data/datasources/zone_finder_local_datasource.dart';
+import 'features/zone_finder/data/datasources/zone_finder_remote_datasource.dart';
 import 'features/zone_finder/data/repositories/zone_finder_repository_impl.dart';
 import 'features/zone_finder/domain/repositories/zone_finder_repository.dart';
 import 'features/zone_finder/domain/usecases/get_all_zones_data.dart';
 import 'features/zone_finder/domain/usecases/get_zone_data.dart';
 import 'features/zone_finder/presentation/bloc/zone_finder_bloc.dart';
+import 'features/zone_finder/presentation/utils/zone_finder_gps_utils.dart';
 import 'firebase_options.dart';
 
 final sl = GetIt.instance;
@@ -62,6 +63,7 @@ Future<void> init() async {
   sl.registerFactory(() => ZoneFinderBloc(
         getAllZonesData: sl(),
         getZoneData: sl(),
+        gpsUtils: sl(),
       ));
 
   // Use Cases
@@ -81,6 +83,9 @@ Future<void> init() async {
   sl.registerLazySingleton<ZoneFinderRemoteDataSource>(
     () => ZoneFinderRemoteDataSourceImpl(firestore: sl(), storage: sl()),
   );
+
+  // Utils
+  sl.registerLazySingleton(() => ZoneFinderGPSUtils());
 
   //! Core
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
