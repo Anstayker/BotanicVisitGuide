@@ -4,9 +4,13 @@ class ActiveZoneCard extends StatelessWidget {
   const ActiveZoneCard({
     super.key,
     required this.context,
+    required this.title,
+    this.subtitle,
   });
 
   final BuildContext context;
+  final String title;
+  final String? subtitle;
 
   @override
   Widget build(BuildContext context) {
@@ -16,27 +20,28 @@ class ActiveZoneCard extends StatelessWidget {
         onTap: () {},
         child: Card(
           color: Colors.grey[100],
-          child: const Padding(
+          child: Padding(
             padding: EdgeInsets.all(16.0),
             child: Row(
               children: [
-                Icon(
+                const Icon(
                   Icons.image, // Icono que representa la imagen
                   size: 100.0, // Tamaño del icono
                 ),
-                SizedBox(width: 16.0), // Espacio entre el icono y el texto
+                const SizedBox(
+                    width: 16.0), // Espacio entre el icono y el texto
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Nombre de la planta',
-                        style: TextStyle(
+                        title,
+                        style: const TextStyle(
                             fontSize: 24, fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        'Subtítulo con descripcion de la planta y de la zona',
-                        style: TextStyle(fontSize: 16),
+                        subtitle ?? '',
+                        style: const TextStyle(fontSize: 16),
                       ),
                     ],
                   ),

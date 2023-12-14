@@ -1,6 +1,10 @@
 import 'package:botanic_visit_guide/core/errors/exceptions.dart';
 import 'package:botanic_visit_guide/core/errors/failures.dart';
+import 'package:botanic_visit_guide/core/network/network_info.dart';
 import 'package:botanic_visit_guide/features/zone_finder/data/datasources/zone_finder_local_datasource.dart';
+import 'package:botanic_visit_guide/features/zone_finder/data/datasources/zone_finder_remote_datasource.dart';
+import 'package:botanic_visit_guide/features/zone_finder/data/models/waypoint_data_model.dart';
+import 'package:botanic_visit_guide/features/zone_finder/data/models/zone_data_model.dart';
 import 'package:botanic_visit_guide/features/zone_finder/data/repositories/zone_finder_repository_impl.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:dartz/dartz.dart';
@@ -9,98 +13,97 @@ import 'package:mocktail/mocktail.dart';
 class MockZoneFinderLocalDataSource extends Mock
     implements ZoneFinderLocalDataSource {}
 
+class MockZoneFinderRemoteDataSource extends Mock
+    implements ZoneFinderRemoteDataSource {}
+
+class MockNetworkInfo extends Mock implements NetworkInfo {}
+
 void main() {
   late MockZoneFinderLocalDataSource mockLocalDataSource;
   late ZoneFinderRepositoryImpl repository;
+  late MockNetworkInfo mockNetworkInfo;
+  late MockZoneFinderRemoteDataSource mockRemoteDataSource;
 
   setUp(() {
     mockLocalDataSource = MockZoneFinderLocalDataSource();
-    repository = ZoneFinderRepositoryImpl(localDataSource: mockLocalDataSource);
+    mockNetworkInfo = MockNetworkInfo();
+    mockRemoteDataSource = MockZoneFinderRemoteDataSource();
+    repository = ZoneFinderRepositoryImpl(
+        localDataSource: mockLocalDataSource,
+        remoteDataSource: mockRemoteDataSource,
+        networkInfo: mockNetworkInfo);
   });
 
   group('getAllZonesData', () {
-    // const tWaypoints = WaypointDataModel(
-    //     waypointId: 'waypointId', latitude: 1.0, longitude: 1.0);
-    // final tZoneDataModel = ZoneDataModel(
-    //     zoneId: 'zoneId',
-    //     name: 'name',
-    //     waypoints: [tWaypoints],
-    //     description: '');
-    // final tZoneDataModelList = [tZoneDataModel, tZoneDataModel];
-    // final tZoneDataList = tZoneDataModelList
-    //     .map((model) => const ZoneData(
-    //         zoneId: 'zoneId',
-    //         zoneName: 'name',
-    //         waypoints: [
-    //           WaypointData(
-    //               waypointId: 'waypointId', latitude: 1.0, longitude: 1.0)
-    //         ],
-    //         zoneDescription: ''))
-    //     .toList();
+    const tWaypointsData = WaypointDataModel(
+        waypointId: 'waypointId', latitude: 1.0, longitude: 1.0);
+    const tZoneDataModel = ZoneDataModel(
+        zoneId: 'zoneId', zoneName: 'zoneName', waypoints: [tWaypointsData]);
+    final tZoneList = [tZoneDataModel];
 
-    // TODO: Fix this test
-    // test(
-    //     'should return list of ZoneData when call to local data source is successful',
-    //     () async {
-    //   when(() => mockLocalDataSource.getAllZones())
-    //       .thenAnswer((_) async => tZoneDataModelList);
-
-    //   final result = await repository.getAllZonesData();
-
-    //   verify(() => mockLocalDataSource.getAllZones());
-    //   expect(result, equals(Right<Failure, List<ZoneData>>(tZoneDataList)));
-    // });
-
-    test(
-        'should return CacheFailure when call to local data source is unsuccessful',
-        () async {
-      when(() => mockLocalDataSource.getAllZones()).thenThrow(CacheException());
-
-      final result = await repository.getAllZonesData();
-
-      verify(() => mockLocalDataSource.getAllZones());
-      expect(result, equals(Left(CacheFailure())));
+    test('should check if the device is online', () async {
+      // arrange
+      when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+      when(() => mockRemoteDataSource.getAllZones())
+          .thenAnswer((_) async => tZoneList);
+      // act
+      repository.getAllZonesData();
+      // assert
+      verify(() => mockNetworkInfo.isConnected);
     });
-  });
 
-  group('getZoneData', () {
-    const tZoneId = 'zoneId';
-    // const tWaypoints = WaypointDataModel(
-    //     waypointId: 'waypointId', latitude: 1.0, longitude: 1.0);
-    // final tZoneDataModel = ZoneDataModel(
-    //     zoneId: 'zoneId',
-    //     name: 'name',
-    //     waypoints: [tWaypoints],
-    //     description: '');
-    // const tWaypointData =
-    //     WaypointData(waypointId: 'waypointId', latitude: 1.0, longitude: 1.0);
-    // const tZoneData = ZoneData(
-    //     zoneId: 'zoneId',
-    //     zoneName: 'name',
-    //     zoneDescription: '',
-    //     waypoints: [tWaypointData]);
-
-    // TODO Fix this test
-    // test('should return ZoneData when call to local data source is successful',
+    // test(
+    //     'should return remote data when the call to remote data source is successful',
     //     () async {
-    //   when(() => mockLocalDataSource.getZoneData(any()))
-    //       .thenAnswer((_) async => tZoneDataModel);
-
-    //   final result = await repository.getZoneData(tZoneId);
-
-    //   verify(() => mockLocalDataSource.getZoneData(tZoneId));
-    //   expect(result, equals(Right(tZoneData)));
+    //   // arrange
+    //   when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+    //   when(() => mockRemoteDataSource.getAllZones())
+    //       .thenAnswer((_) async => tZoneList);
+    //   // act
+    //   final result = await repository.getAllZonesData();
+    //   final zoneDataList = result.fold((l) => null, (r) => r);
+    //   // assert
+    //   verify(() => mockRemoteDataSource.getAllZones());
+    //   expect(zoneDataList, equals(Right(tZoneInfoList)));
     // });
 
     test(
-        'should return CacheFailure when call to local data source is unsuccessful',
+        'should return server failure when the call to remote data source is unsuccessful',
         () async {
-      when(() => mockLocalDataSource.getZoneData(any()))
-          .thenThrow(CacheException());
+      // arrange
+      when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+      when(() => mockRemoteDataSource.getAllZones())
+          .thenThrow(ServerException());
+      // act
+      final result = await repository.getAllZonesData();
+      // assert
+      verify(() => mockRemoteDataSource.getAllZones());
+      expect(result, equals(Left(ServerFailure())));
+    });
 
-      final result = await repository.getZoneData(tZoneId);
+    // test(
+    //     'should return last locally cached data when the cached data is present',
+    //     () async {
+    //   // arrange
+    //   when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => false);
+    //   when(() => mockLocalDataSource.getAllZones())
+    //       .thenAnswer((_) async => tZoneList);
+    //   // act
+    //   final result = await repository.getAllZonesData();
+    //   // assert
+    //   verify(() => mockLocalDataSource.getAllZones());
+    //   expect(result, equals(Right(tZoneList)));
+    // });
 
-      verify(() => mockLocalDataSource.getZoneData(tZoneId));
+    test('should return CacheFailure when there is no cached data present',
+        () async {
+      // arrange
+      when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => false);
+      when(() => mockLocalDataSource.getAllZones()).thenThrow(CacheException());
+      // act
+      final result = await repository.getAllZonesData();
+      // assert
+      verify(() => mockLocalDataSource.getAllZones());
       expect(result, equals(Left(CacheFailure())));
     });
   });

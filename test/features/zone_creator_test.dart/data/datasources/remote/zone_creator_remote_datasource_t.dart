@@ -2,10 +2,13 @@
 // import 'package:botanic_visit_guide/features/zone_creator/data/models/waypoint_info_model.dart';
 // import 'package:botanic_visit_guide/features/zone_creator/data/models/zone_info_model.dart';
 // import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:firebase_storage/firebase_storage.dart';
 // import 'package:flutter_test/flutter_test.dart';
 // import 'package:mocktail/mocktail.dart';
 
 // class MockFirebaseFirestore extends Mock implements FirebaseFirestore {}
+
+// class MockFirebaseStorage extends Mock implements FirebaseStorage {}
 
 // class MockCollectionReference extends Mock implements CollectionReference {}
 
@@ -16,13 +19,15 @@
 //   late MockFirebaseFirestore mockFirebaseFirestore;
 //   late MockCollectionReference mockCollectionReference;
 //   late MockDocumentReference mockDocumentReference;
+//   late MockFirebaseStorage mockFirebaseStorage;
 
 //   setUp(() {
 //     mockFirebaseFirestore = MockFirebaseFirestore();
 //     mockCollectionReference = MockCollectionReference();
 //     mockDocumentReference = MockDocumentReference();
-//     datasource =
-//         ZoneCreatorRemoteDatasourceImpl(firestore: mockFirebaseFirestore);
+//     mockFirebaseStorage = MockFirebaseStorage();
+//     datasource = ZoneCreatorRemoteDatasourceImpl(
+//         firestore: mockFirebaseFirestore, storage: mockFirebaseStorage);
 
 //     when(() => mockFirebaseFirestore.collection(any())).thenReturn(
 //         mockCollectionReference as CollectionReference<Map<String, dynamic>>);
@@ -57,5 +62,4 @@
 //       expect(result, equals(false));
 //     });
 //   });
-
 // }

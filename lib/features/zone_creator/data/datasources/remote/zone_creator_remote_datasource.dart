@@ -26,8 +26,9 @@ class ZoneCreatorRemoteDatasourceImpl implements ZoneCreatorRemoteDatasource {
     try {
       // Crear una lista para almacenar las URLs de las imágenes
       List<String> imageUrls = [];
+      List<Future<void>> uploadTasks = [];
 
-      // Subir cada imagen a Firebase Storage solo si se proporcionaron imágenes
+// Subir cada imagen a Firebase Storage solo si se proporcionaron imágenes
       if (images != null) {
         for (var image in images) {
           final firebaseStorageRef = storage
@@ -35,16 +36,23 @@ class ZoneCreatorRemoteDatasourceImpl implements ZoneCreatorRemoteDatasource {
               .child('zones/${zone.zoneId}/${path.basename(image.path)}');
           UploadTask uploadTask = firebaseStorageRef.putFile(image);
 
-          // Obtener la URL de la imagen
-          final downloadUrl = await (await uploadTask).ref.getDownloadURL();
+          // Agregar la tarea de subida a la lista
+          uploadTasks.add(uploadTask.then((TaskSnapshot snapshot) async {
+            // Obtener la URL de la imagen
+            final downloadUrl = await snapshot.ref.getDownloadURL();
 
-          // Agregar la URL de la imagen a la lista
-          imageUrls.add(downloadUrl);
+            // Agregar la URL de la imagen a la lista
+            imageUrls.add(downloadUrl);
+          }));
         }
       }
+      // Esperar a que todas las tareas de subida se hayan completado
+      await Future.wait(uploadTasks);
 
       // Agregar las URLs de las imágenes al objeto zone
       zone.images?.value = imageUrls;
+
+      print(zone.toJson());
 
       // Subir objeto Zone a Firestore
       await firestore.collection('zones').doc(zone.zoneId).set(zone.toJson());

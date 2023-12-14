@@ -26,8 +26,8 @@ void main() {
         '[{"zoneId":"1","name":"name","waypoints":[{"waypointId":"1","latitude":1.0,"longitude":1.0}]}]';
     const WaypointDataModel tWaypointDataModel =
         WaypointDataModel(waypointId: '1', latitude: 1.0, longitude: 1.0);
-    final ZoneDataModel tZoneDataModel = ZoneDataModel(
-        zoneId: '1', name: 'name', waypoints: [tWaypointDataModel]);
+    const ZoneDataModel tZoneDataModel = ZoneDataModel(
+        zoneId: '1', zoneName: 'name', waypoints: [tWaypointDataModel]);
     final List<ZoneDataModel> tZoneList = [tZoneDataModel];
 
     test('should return ZoneDataList when there is one in the cache', () async {
@@ -40,8 +40,8 @@ void main() {
       verify(() => mockSharedPreferences.getString('CACHE_ZONES_DATA'));
       for (var i = 0; i < result.length; i++) {
         expect(result[i].zoneId, equals(tZoneList[i].zoneId));
-        expect(result[i].name, equals(tZoneList[i].name));
-        expect(result[i].description, equals(tZoneList[i].description));
+        expect(result[i].zoneName, equals(tZoneList[i].zoneName));
+        expect(result[i].zoneDescription, equals(tZoneList[i].zoneDescription));
         expect(result[i].waypoints, equals(tZoneList[i].waypoints));
       }
     });
@@ -61,8 +61,8 @@ void main() {
     const tZoneId = '123';
     const tWaypoint =
         WaypointDataModel(waypointId: '1', latitude: 1.0, longitude: 1.0);
-    final tZoneDataModel = ZoneDataModel(
-        zoneId: tZoneId, name: 'ZoneName', waypoints: [tWaypoint]);
+    const tZoneDataModel = ZoneDataModel(
+        zoneId: tZoneId, zoneName: 'ZoneName', waypoints: [tWaypoint]);
     String zoneDataModelEncoded = jsonEncode(tZoneDataModel.toJson());
     final jsonString = '[$zoneDataModelEncoded]';
 
@@ -73,8 +73,8 @@ void main() {
       final result = await localDataSource.getZoneData(tZoneId);
       // assert
       expect(result.zoneId, equals(tZoneDataModel.zoneId));
-      expect(result.name, equals(tZoneDataModel.name));
-      expect(result.description, equals(tZoneDataModel.description));
+      expect(result.zoneName, equals(tZoneDataModel.zoneName));
+      expect(result.zoneDescription, equals(tZoneDataModel.zoneDescription));
       expect(result.waypoints, equals(tZoneDataModel.waypoints));
     });
 

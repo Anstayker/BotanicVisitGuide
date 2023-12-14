@@ -29,8 +29,8 @@ class ZoneFinderPage extends StatelessWidget {
           }
           if (state is ZonesLoadSuccess) {
             // TODO order zones
-            // _zonesFound = state.zonesFound;
-            // _zonesActive = state.zonesActive;
+            zonesFound = state.zones;
+            //zonesActive = state.zones;
           }
           return CustomScrollView(
             slivers: <Widget>[
@@ -85,9 +85,12 @@ class ZoneFinderPage extends StatelessWidget {
       return SliverList(
         delegate: SliverChildBuilderDelegate(
           (BuildContext context, int index) {
-            return ActiveZoneCard(context: context);
+            return ActiveZoneCard(
+                context: context,
+                title: zonesActive[index].zoneName,
+                subtitle: zonesActive[index].zoneDescription);
           },
-          childCount: 2,
+          childCount: zonesActive.length,
         ),
       );
     }
@@ -119,12 +122,12 @@ class ZoneFinderPage extends StatelessWidget {
         delegate: SliverChildBuilderDelegate(
           (BuildContext context, int index) {
             return ZoneFoundCard(
-              zoneName: 'zoneName',
-              zoneDescription: 'zoneDescription',
+              zoneName: zonesFound[index].zoneName,
+              zoneDescription: zonesFound[index].zoneDescription ?? '',
               context: context,
             );
           },
-          childCount: 100,
+          childCount: zonesFound.length,
         ),
       );
     }

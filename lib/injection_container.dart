@@ -1,4 +1,5 @@
 import 'package:botanic_visit_guide/features/zone_creator/data/datasources/remote/zone_creator_remote_datasource.dart';
+import 'package:botanic_visit_guide/features/zone_finder/data/datasources/zone_finder_remote_datasource.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -70,12 +71,16 @@ Future<void> init() async {
   // Repository
   sl.registerLazySingleton<ZoneFinderRepository>(() => ZoneFinderRepositoryImpl(
         localDataSource: sl(),
-        //networkInfo: sl(),
+        remoteDataSource: sl(),
+        networkInfo: sl(),
       ));
 
   // Data Sources
   sl.registerLazySingleton<ZoneFinderLocalDataSource>(
       () => ZoneFinderLocalDataSourceImpl(sharedPreferences: sl()));
+  sl.registerLazySingleton<ZoneFinderRemoteDataSource>(
+    () => ZoneFinderRemoteDataSourceImpl(firestore: sl(), storage: sl()),
+  );
 
   //! Core
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));

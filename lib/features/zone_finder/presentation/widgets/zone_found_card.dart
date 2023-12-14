@@ -20,9 +20,15 @@ class ZoneFoundCard extends StatelessWidget {
         color: Colors.grey[100],
         child: ListTile(
           leading: const Icon(Icons.forest, color: Colors.grey),
-          title: Text(zoneName),
+          title: Text(
+            zoneName,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+          ),
           subtitle: Text(
             zoneDescription,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 2,
           ),
           trailing: const Icon(Icons.arrow_forward_ios),
           onTap: () {},

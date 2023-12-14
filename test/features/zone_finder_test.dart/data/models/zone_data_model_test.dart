@@ -1,18 +1,18 @@
+import 'package:botanic_visit_guide/features/zone_finder/data/models/waypoint_data_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:botanic_visit_guide/features/zone_finder/data/models/zone_data_model.dart';
-import 'package:botanic_visit_guide/features/zone_finder/domain/entities/waypoint_data.dart';
 
 void main() {
   group('ZoneDataModel', () {
     test('should correctly serialize to JSON', () {
       // arrange
-      final model = ZoneDataModel(
+      const model = ZoneDataModel(
         zoneId: "1",
-        name: 'Test Zone',
+        zoneName: 'Test Zone',
         description: 'This is a test zone',
         waypoints: [
-          const WaypointData(waypointId: '1', latitude: 1.0, longitude: 1.0)
+          WaypointDataModel(waypointId: '1', latitude: 1.0, longitude: 1.0)
         ],
       );
 
@@ -43,8 +43,8 @@ void main() {
       // assert
       expect(fromJsonModel, isNotNull);
       expect(fromJsonModel.zoneId, "1");
-      expect(fromJsonModel.name, 'Test Zone');
-      expect(fromJsonModel.description, 'This is a test zone');
+      expect(fromJsonModel.zoneName, 'Test Zone');
+      expect(fromJsonModel.zoneDescription, 'This is a test zone');
     });
   });
 }

@@ -36,6 +36,9 @@ class _ZoneCreatorPageState extends State<ZoneCreatorPage> {
   final ImagePicker _picker = ImagePicker();
   List<XFile>? _images;
 
+  String zoneName = '';
+  String zoneDescription = '';
+
   Future<void> _selectImages() async {
     final List<XFile> selectedImages = await _picker.pickMultiImage();
     setState(() {
@@ -64,7 +67,7 @@ class _ZoneCreatorPageState extends State<ZoneCreatorPage> {
             BlocBuilder<ZoneCreatorBloc, ZoneCreatorState>(
               builder: (context, state) {
                 if (state is ZoneCreatorInitial) {
-                  return _zoneCreatorForm();
+                  return _zoneCreatorForm(context);
                 } else if (state is ZoneAddSubmiting) {
                   _isFormActive = false;
                 } else if (state is ZoneAddSuccess) {
@@ -83,7 +86,7 @@ class _ZoneCreatorPageState extends State<ZoneCreatorPage> {
                     _showAddFailureDialog(context, state);
                   });
                 }
-                return _zoneCreatorForm();
+                return _zoneCreatorForm(context);
               },
             )
           ],
@@ -110,7 +113,7 @@ class _ZoneCreatorPageState extends State<ZoneCreatorPage> {
         });
   }
 
-  Widget _zoneCreatorForm() {
+  Widget _zoneCreatorForm(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
       child: Form(
@@ -122,7 +125,7 @@ class _ZoneCreatorPageState extends State<ZoneCreatorPage> {
               verticalPadding: 16.0,
             ),
             ZoneNameTextField(
-                isFormActive: _isFormActive,
+                isFormActive: true,
                 zoneNameController: _zoneNameController,
                 onSaved: (value) {}),
             const ZoneCreatorTitle(
@@ -139,7 +142,7 @@ class _ZoneCreatorPageState extends State<ZoneCreatorPage> {
             ),
             TextField(
                 controller: _descriptionController,
-                enabled: _isFormActive,
+                enabled: true,
                 maxLines: null,
                 minLines: 1,
                 decoration: const InputDecoration(
@@ -160,16 +163,17 @@ class _ZoneCreatorPageState extends State<ZoneCreatorPage> {
             if (_images != null)
               for (var image in _images!) Image.file(File(image.path)),
             _formSizedBox(),
-            CreateZoneButton(
-                formKey: _formKey,
-                context: context,
-                isFormActive: _isFormActive,
-                newZone: ZoneInfo(
-                  zoneId: _uuid.v4().substring(0, 8),
-                  name: _zoneNameController.text,
-                  waypoints: _waypointsList,
-                  description: _descriptionController.text,
-                )),
+            _submitButton(context),
+            // CreateZoneButton(
+            //     formKey: _formKey,
+            //     context: context,
+            //     isFormActive: _isFormActive,
+            //     newZone: ZoneInfo(
+            //       zoneId: _uuid.v4().substring(0, 8),
+            //       name: _zoneNameController.text,
+            //       waypoints: _waypointsList,
+            //       description: _descriptionController.text,
+            //     )),
           ],
         ),
       ),
@@ -274,5 +278,39 @@ class _ZoneCreatorPageState extends State<ZoneCreatorPage> {
 
   _formSizedBox() {
     return const SizedBox(height: 16.0);
+  }
+
+  _submitButton(BuildContext context) {
+    return FractionallySizedBox(
+      widthFactor: 1,
+      child: ElevatedButton(
+          onPressed: _isFormActive
+              ? () {
+                  final newZone = ZoneInfo(
+                    zoneId: _uuid.v4().substring(0, 8),
+                    name: _zoneNameController.text,
+                    waypoints: _waypointsList,
+                    description: _descriptionController.text,
+                  );
+                  if (_formKey.currentState!.validate()) {
+                    if (newZone.waypoints.length < 3) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                            content: Text(
+                                'Deben haber al menos 3 puntos de referencia en la lista')),
+                      );
+                    } else {
+                      _formKey.currentState!.save();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Creando una nueva Zona')),
+                      );
+                      BlocProvider.of<ZoneCreatorBloc>(context)
+                          .add(AddZoneEvent(zone: newZone));
+                    }
+                  }
+                }
+              : null,
+          child: const Text('Crear Zona')),
+    );
   }
 }
