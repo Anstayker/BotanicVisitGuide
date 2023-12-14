@@ -1,6 +1,7 @@
 import 'package:botanic_visit_guide/features/zone_creator/data/datasources/remote/zone_creator_remote_datasource.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -53,7 +54,7 @@ Future<void> init() async {
     () => ZoneCreatorLocalDataSourceImpl(sharedPreferences: sl()),
   );
   sl.registerLazySingleton<ZoneCreatorRemoteDatasource>(
-      () => ZoneCreatorRemoteDatasourceImpl(firestore: sl()));
+      () => ZoneCreatorRemoteDatasourceImpl(firestore: sl(), storage: sl()));
 
   //! Features - Zone Finder
   // Bloc
@@ -89,5 +90,6 @@ Future<void> init() async {
       options: DefaultFirebaseOptions.currentPlatform);
   sl.registerLazySingleton(() => firebase);
   sl.registerLazySingleton(() => FirebaseFirestore.instance);
+  sl.registerLazySingleton(() => FirebaseStorage.instance);
   sl.registerLazySingleton(() => InternetConnection());
 }

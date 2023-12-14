@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:botanic_visit_guide/features/zone_creator/data/models/waypoint_info_model.dart';
+import 'package:flutter/material.dart';
 
 import '../../domain/entities/zone_info.dart';
 
@@ -13,37 +14,69 @@ String zoneModelToJson(List<ZoneInfoModel> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class ZoneInfoModel extends ZoneInfo {
-  const ZoneInfoModel({required zoneId, required name, required waypoints})
-      : super(zoneId: zoneId, name: name, waypoints: waypoints);
+  const ZoneInfoModel({
+    required String zoneId,
+    required String name,
+    required List<WaypointInfoModel> waypoints,
+    String? description,
+    ValueNotifier<List<String>?>? images,
+    String? audio,
+  }) : super(
+          zoneId: zoneId,
+          name: name,
+          waypoints: waypoints,
+          description: description,
+          images: images,
+          audio: audio,
+        );
 
   Map<String, dynamic> toMap() {
     return {
       'zoneId': zoneId,
       'name': name,
-      'waypoints': waypoints,
+      'waypoints': waypoints
+          .map((waypoint) => (waypoint as WaypointInfoModel).toMap())
+          .toList(),
+      'description': description,
+      'images': images?.value,
+      'audio': audio,
     };
   }
 
-  static ZoneInfo fromMap(Map<String, dynamic> map) {
-    return ZoneInfo(
+  static ZoneInfoModel fromMap(Map<String, dynamic> map) {
+    return ZoneInfoModel(
       zoneId: map['zoneId'],
       name: map['name'],
-      waypoints: map['waypoints'],
+      waypoints: List<WaypointInfoModel>.from(
+          map['waypoints'].map((x) => WaypointInfoModel.fromMap(x))),
+      description: map['description'],
+      images:
+          ValueNotifier<List<String>?>(List<String>.from(map['images'] ?? [])),
+      audio: map['audio'],
     );
   }
 
-  factory ZoneInfoModel.fromJson(Map<String, dynamic> json) => ZoneInfoModel(
-        zoneId: json["zoneId"],
-        name: json["name"],
-        waypoints: List<WaypointInfoModel>.from(
-            json["waypoints"].map((x) => WaypointInfoModel.fromJson(x))),
-      );
+  factory ZoneInfoModel.fromJson(Map<String, dynamic> json) {
+    return ZoneInfoModel(
+      zoneId: json["zoneId"],
+      name: json["name"],
+      waypoints: List<WaypointInfoModel>.from(
+          json["waypoints"].map((x) => WaypointInfoModel.fromJson(x))),
+      description: json['description'],
+      images:
+          ValueNotifier<List<String>?>(List<String>.from(json['images'] ?? [])),
+      audio: json['audio'],
+    );
+  }
 
   Map<String, dynamic> toJson() => {
         "zoneId": zoneId,
         "name": name,
         "waypoints": List<dynamic>.from(
             waypoints.map((x) => WaypointInfoModel.fromWaypoint(x).toJson())),
+        "description": description,
+        "images": images?.value,
+        "audio": audio,
       };
 
   factory ZoneInfoModel.fromEntity(ZoneInfo entity) {
@@ -52,6 +85,9 @@ class ZoneInfoModel extends ZoneInfo {
       name: entity.name,
       waypoints:
           entity.waypoints.map((e) => WaypointInfoModel.fromEntity(e)).toList(),
+      description: entity.description,
+      images: entity.images,
+      audio: entity.audio,
     );
   }
 }

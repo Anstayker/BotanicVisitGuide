@@ -4,6 +4,9 @@
       "name": "name",
       "waypoints": [
         {"waypointId": "1", "latitude": 1.0, "longitude": 1.0}
-      ]
+      ],
+      "description": null,
+      "images": [],
+      "audio": null
     }
   ]

@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:botanic_visit_guide/features/home/presentation/pages/home_page.dart';
 import 'package:flutter/material.dart';
 
 import 'package:dartz/dartz.dart' as dartz;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../core/errors/failures.dart';
@@ -30,6 +33,15 @@ class _ZoneCreatorPageState extends State<ZoneCreatorPage> {
   List<WaypointInfo> _waypointsList = [];
   bool _isFormActive = true;
   final _uuid = sl<Uuid>();
+  final ImagePicker _picker = ImagePicker();
+  List<XFile>? _images;
+
+  Future<void> _selectImages() async {
+    final List<XFile> selectedImages = await _picker.pickMultiImage();
+    setState(() {
+      _images = selectedImages;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,8 +75,7 @@ class _ZoneCreatorPageState extends State<ZoneCreatorPage> {
                     );
                     Navigator.pushAndRemoveUntil(
                         context,
-                        MaterialPageRoute(
-                            builder: (_) => const HomePage()),
+                        MaterialPageRoute(builder: (_) => const HomePage()),
                         (Route<dynamic> route) => false);
                   });
                 } else if (state is ZoneAddFailure) {
@@ -123,18 +134,18 @@ class _ZoneCreatorPageState extends State<ZoneCreatorPage> {
             _waypointsExpansionPanel(),
             _formSizedBox(),
             const ZoneCreatorTitle(
-              title: 'Añadir descripción', 
-              verticalPadding: 16.0,),
-            TextField(
-              controller: _descriptionController,
-              enabled: _isFormActive,
-              maxLines: null,
-              minLines: 1,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Descripción',
-              )
+              title: 'Añadir descripción',
+              verticalPadding: 16.0,
             ),
+            TextField(
+                controller: _descriptionController,
+                enabled: _isFormActive,
+                maxLines: null,
+                minLines: 1,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Descripción',
+                )),
             const ZoneCreatorTitle(
               title: 'Añadir audio',
               verticalPadding: 16.0,
@@ -143,6 +154,11 @@ class _ZoneCreatorPageState extends State<ZoneCreatorPage> {
               title: 'Añadir imagenes',
               verticalPadding: 16.0,
             ),
+            ElevatedButton(
+                onPressed: _selectImages,
+                child: const Text('Seleccionar imágenes')),
+            if (_images != null)
+              for (var image in _images!) Image.file(File(image.path)),
             _formSizedBox(),
             CreateZoneButton(
                 formKey: _formKey,

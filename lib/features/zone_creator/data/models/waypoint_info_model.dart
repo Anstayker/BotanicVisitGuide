@@ -21,6 +21,22 @@ class WaypointInfoModel extends WaypointInfo {
     };
   }
 
+  Map<String, dynamic> toMap() {
+    return {
+      'waypointId': waypointId,
+      'latitude': latitude,
+      'longitude': longitude,
+    };
+  }
+
+  static WaypointInfoModel fromMap(Map<String, dynamic> map) {
+    return WaypointInfoModel(
+      waypointId: map['waypointId'],
+      latitude: map['latitude'],
+      longitude: map['longitude'],
+    );
+  }
+
   static WaypointInfoModel fromWaypoint(WaypointInfo waypoint) {
     return WaypointInfoModel(
       waypointId: waypoint.waypointId,

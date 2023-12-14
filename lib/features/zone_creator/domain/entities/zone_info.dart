@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
 import 'waypoint_info.dart';
 
@@ -7,7 +8,7 @@ class ZoneInfo extends Equatable {
   final String name;
   final List<WaypointInfo> waypoints;
   final String? description;
-  final List<String>? images;
+  final ValueNotifier<List<String>?>? images;
   final String? audio;
 
   const ZoneInfo({
@@ -20,5 +21,6 @@ class ZoneInfo extends Equatable {
   });
 
   @override
-  List<Object?> get props => [zoneId, name, waypoints, description, images, audio];
+  List<Object?> get props =>
+      [zoneId, name, waypoints, description, images?.value, audio];
 }

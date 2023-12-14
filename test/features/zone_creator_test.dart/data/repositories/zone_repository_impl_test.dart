@@ -2,6 +2,7 @@ import 'package:botanic_visit_guide/core/errors/failures.dart';
 import 'package:botanic_visit_guide/core/network/network_info.dart';
 import 'package:botanic_visit_guide/features/zone_creator/data/datasources/local/zone_creator_local_datasource.dart';
 import 'package:botanic_visit_guide/features/zone_creator/data/datasources/remote/zone_creator_remote_datasource.dart';
+import 'package:botanic_visit_guide/features/zone_creator/data/models/waypoint_info_model.dart';
 import 'package:botanic_visit_guide/features/zone_creator/data/models/zone_info_model.dart';
 import 'package:botanic_visit_guide/features/zone_creator/data/repositories/zone_repository_impl.dart';
 import 'package:botanic_visit_guide/features/zone_creator/domain/entities/waypoint_info.dart';
@@ -36,7 +37,7 @@ void main() {
 
   group('getAllZones', () {
     const tWaypoint =
-        WaypointInfo(waypointId: '1', latitude: 1.0, longitude: 1.0);
+        WaypointInfoModel(waypointId: '1', latitude: 1.0, longitude: 1.0);
     final tZoneModeList = [
       const ZoneInfoModel(zoneId: '1', name: 'Zone 1', waypoints: [tWaypoint])
     ];
