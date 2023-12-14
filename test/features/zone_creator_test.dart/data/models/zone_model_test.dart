@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:botanic_visit_guide/features/zone_creator/data/models/waypoint_info_model.dart';
 import 'package:botanic_visit_guide/features/zone_creator/data/models/zone_info_model.dart';
 import 'package:botanic_visit_guide/features/zone_creator/domain/entities/zone_info.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../../fixtures/fixture_reader.dart';
@@ -11,11 +10,8 @@ import '../../../../fixtures/fixture_reader.dart';
 void main() {
   const tWaypointModel =
       WaypointInfoModel(waypointId: '1', latitude: 1.0, longitude: 1.0);
-  final tZoneModel = ZoneInfoModel(
-      zoneId: '1',
-      name: 'name',
-      waypoints: const [tWaypointModel],
-      images: ValueNotifier<List<String>?>([]));
+  const tZoneModel = ZoneInfoModel(
+      zoneId: '1', name: 'name', waypoints: [tWaypointModel], images: []);
   // final tZoneInfo = ZoneInfo(
   //     zoneId: '1',
   //     name: 'name',

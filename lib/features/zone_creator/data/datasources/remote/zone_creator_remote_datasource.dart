@@ -12,6 +12,7 @@ abstract class ZoneCreatorRemoteDatasource {
   Future<bool> deleteZone(String zoneId);
   Future<bool> updateZone(ZoneInfoModel zone);
   Future<List<ZoneInfoModel>> getAllZones();
+  Future<List<String>> getAllImages(String zoneId);
 }
 
 class ZoneCreatorRemoteDatasourceImpl implements ZoneCreatorRemoteDatasource {
@@ -26,9 +27,7 @@ class ZoneCreatorRemoteDatasourceImpl implements ZoneCreatorRemoteDatasource {
     try {
       // Crear una lista para almacenar las URLs de las imágenes
       List<String> imageUrls = [];
-      List<Future<void>> uploadTasks = [];
-
-// Subir cada imagen a Firebase Storage solo si se proporcionaron imágenes
+      // Subir cada imagen a Firebase Storage solo si se proporcionaron imágenes
       if (images != null) {
         for (var image in images) {
           final firebaseStorageRef = storage
@@ -36,23 +35,18 @@ class ZoneCreatorRemoteDatasourceImpl implements ZoneCreatorRemoteDatasource {
               .child('zones/${zone.zoneId}/${path.basename(image.path)}');
           UploadTask uploadTask = firebaseStorageRef.putFile(image);
 
-          // Agregar la tarea de subida a la lista
-          uploadTasks.add(uploadTask.then((TaskSnapshot snapshot) async {
-            // Obtener la URL de la imagen
-            final downloadUrl = await snapshot.ref.getDownloadURL();
+          // Esperar a que la tarea de subida se complete
+          await uploadTask;
 
-            // Agregar la URL de la imagen a la lista
-            imageUrls.add(downloadUrl);
-          }));
+          // Obtener la URL de la imagen subida
+          String imageUrl = await firebaseStorageRef.getDownloadURL();
+
+          // Agregar la URL de la imagen a la lista
+          imageUrls.add(imageUrl);
         }
       }
-      // Esperar a que todas las tareas de subida se hayan completado
-      await Future.wait(uploadTasks);
 
-      // Agregar las URLs de las imágenes al objeto zone
-      zone.images?.value = imageUrls;
-
-      print(zone.toJson());
+      // Agregar las URLs de las imágenes al objeto Zone
 
       // Subir objeto Zone a Firestore
       await firestore.collection('zones').doc(zone.zoneId).set(zone.toJson());
@@ -83,6 +77,7 @@ class ZoneCreatorRemoteDatasourceImpl implements ZoneCreatorRemoteDatasource {
           .collection('zones')
           .doc(zone.zoneId)
           .update(zone.toJson());
+
       return true;
     } catch (e) {
       return false;
@@ -93,10 +88,43 @@ class ZoneCreatorRemoteDatasourceImpl implements ZoneCreatorRemoteDatasource {
   Future<List<ZoneInfoModel>> getAllZones() async {
     try {
       QuerySnapshot snapshot = await firestore.collection('zones').get();
-      return snapshot.docs
-          .map((doc) =>
-              ZoneInfoModel.fromJson(doc.data() as Map<String, dynamic>))
-          .toList();
+      return snapshot.docs.map((doc) {
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+
+        // var test = getAllImages(doc.id);
+        // print(test);
+
+        return ZoneInfoModel.fromJson(data);
+      }).toList();
+    } catch (e) {
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<List<String>> getAllImages(String zoneId) async {
+    try {
+      // Obtener el documento de la zona
+      DocumentSnapshot doc =
+          await firestore.collection('zones').doc(zoneId).get();
+      Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+
+      // Obtener la lista de nombres de las imágenes
+      List<String> imageNames = List<String>.from(data['images'] ?? []);
+
+      // Obtener las URLs de descarga de las imágenes
+      List<String> imageUrls = await Future.wait(imageNames.map((name) async {
+        try {
+          // Crear una referencia a la imagen en Firebase Storage
+          final ref = storage.ref().child('zones/$zoneId/$name');
+          String url = await ref.getDownloadURL();
+          return url;
+        } catch (e) {
+          return '';
+        }
+      }));
+
+      return imageUrls;
     } catch (e) {
       throw ServerException();
     }

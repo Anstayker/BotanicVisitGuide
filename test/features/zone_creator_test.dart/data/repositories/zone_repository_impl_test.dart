@@ -90,7 +90,7 @@ void main() {
       when(() => mockLocalDataSource.addZone(tZoneModel))
           .thenAnswer((_) async => true);
 
-      final result = await repository.addZone(tZoneInfo);
+      final result = await repository.addZone(tZoneInfo, []);
 
       expect(result, equals(left(NetworkFailure())));
     });
@@ -100,12 +100,12 @@ void main() {
         () async {
       // arrange
       when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-      when(() => mockRemoteDataSource.addNewZone(tZoneModel))
+      when(() => mockRemoteDataSource.addNewZone(tZoneModel, []))
           .thenAnswer((_) async => true);
       // act
-      final result = await repository.addZone(tZoneInfo);
+      final result = await repository.addZone(tZoneInfo, []);
       // assert
-      verify(() => mockRemoteDataSource.addNewZone(tZoneModel)).called(1);
+      verify(() => mockRemoteDataSource.addNewZone(tZoneModel, [])).called(1);
       expect(result, equals(right(null)));
     });
 
@@ -114,7 +114,7 @@ void main() {
       // arrange
       when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => false);
       // act
-      final result = await repository.addZone(tZoneInfo);
+      final result = await repository.addZone(tZoneInfo, []);
       // assert
       expect(result, equals(left(NetworkFailure())));
     });

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:botanic_visit_guide/core/errors/exceptions.dart';
 import 'package:botanic_visit_guide/core/network/network_info.dart';
 import 'package:dartz/dartz.dart';
@@ -20,11 +22,12 @@ class ZoneRepositoryImpl implements ZoneRepository {
       required this.networkInfo});
 
   @override
-  Future<Either<Failure, void>> addZone(ZoneInfo newZone) async {
+  Future<Either<Failure, void>> addZone(
+      ZoneInfo newZone, List<File>? images) async {
     if (await networkInfo.isConnected) {
       try {
         ZoneInfoModel zoneModel = ZoneInfoModel.fromEntity(newZone);
-        await remoteDatasource.addNewZone(zoneModel);
+        await remoteDatasource.addNewZone(zoneModel, images);
         return Future.value(right(null));
       } on ServerException {
         return Future.value(left(ServerFailure()));

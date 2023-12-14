@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
@@ -29,7 +31,8 @@ class ZoneCreatorBloc extends Bloc<ZoneCreatorEvent, ZoneCreatorState> {
 
     on<AddZoneEvent>((event, emit) async {
       emit(ZoneAddSubmiting());
-      final result = await addZone(Params(zone: event.zone));
+      final result =
+          await addZone(Params(zone: event.zone, images: event.images));
       result
           .fold((failure) => const ZoneAddFailure(message: cacheFailureMessage),
               (_) async {

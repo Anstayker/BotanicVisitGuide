@@ -41,7 +41,7 @@ class CreateZoneButton extends StatelessWidget {
                       );
                       final newZone = _newZone;
                       BlocProvider.of<ZoneCreatorBloc>(context)
-                          .add(AddZoneEvent(zone: newZone));
+                          .add(AddZoneEvent(zone: newZone, images: []));
                     }
                   }
                 }

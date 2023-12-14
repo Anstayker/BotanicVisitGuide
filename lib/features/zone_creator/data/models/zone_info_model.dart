@@ -3,7 +3,6 @@
 import 'dart:convert';
 
 import 'package:botanic_visit_guide/features/zone_creator/data/models/waypoint_info_model.dart';
-import 'package:flutter/material.dart';
 
 import '../../domain/entities/zone_info.dart';
 
@@ -19,7 +18,7 @@ class ZoneInfoModel extends ZoneInfo {
     required String name,
     required List<WaypointInfoModel> waypoints,
     String? description,
-    ValueNotifier<List<String>?>? images,
+    List<String>? images,
     String? audio,
   }) : super(
           zoneId: zoneId,
@@ -38,7 +37,7 @@ class ZoneInfoModel extends ZoneInfo {
           .map((waypoint) => (waypoint as WaypointInfoModel).toMap())
           .toList(),
       'description': description,
-      'images': images?.value,
+      'images': images,
       'audio': audio,
     };
   }
@@ -50,8 +49,7 @@ class ZoneInfoModel extends ZoneInfo {
       waypoints: List<WaypointInfoModel>.from(
           map['waypoints'].map((x) => WaypointInfoModel.fromMap(x))),
       description: map['description'],
-      images:
-          ValueNotifier<List<String>?>(List<String>.from(map['images'] ?? [])),
+      images: List<String>.from(map['images'] ?? []),
       audio: map['audio'],
     );
   }
@@ -63,8 +61,7 @@ class ZoneInfoModel extends ZoneInfo {
       waypoints: List<WaypointInfoModel>.from(
           json["waypoints"].map((x) => WaypointInfoModel.fromJson(x))),
       description: json['description'],
-      images:
-          ValueNotifier<List<String>?>(List<String>.from(json['images'] ?? [])),
+      images: List<String>.from(json['images'] ?? []),
       audio: json['audio'],
     );
   }
@@ -75,7 +72,7 @@ class ZoneInfoModel extends ZoneInfo {
         "waypoints": List<dynamic>.from(
             waypoints.map((x) => WaypointInfoModel.fromWaypoint(x).toJson())),
         "description": description,
-        "images": images?.value,
+        "images": images,
         "audio": audio,
       };
 

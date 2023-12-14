@@ -18,7 +18,8 @@ void main() {
     addZone = AddZone(mockZoneRepository);
   });
 
-  const tWaypoiont = WaypointInfo(waypointId: '1', latitude: 1.0, longitude: 1.0);
+  const tWaypoiont =
+      WaypointInfo(waypointId: '1', latitude: 1.0, longitude: 1.0);
   const tZoneInfo =
       ZoneInfo(zoneId: '1', name: 'Zona 1', waypoints: [tWaypoiont]);
 
@@ -26,13 +27,13 @@ void main() {
     "should add a zone to the repository",
     () async {
       // arrange
-      when(() => mockZoneRepository.addZone(tZoneInfo))
+      when(() => mockZoneRepository.addZone(tZoneInfo, []))
           .thenAnswer((_) async => const Right(null));
       // act
-      final result = await addZone(const Params(zone: tZoneInfo));
+      final result = await addZone(const Params(zone: tZoneInfo, images: []));
       // assert
       expect(result, const Right(null));
-      verify(() => mockZoneRepository.addZone(tZoneInfo));
+      verify(() => mockZoneRepository.addZone(tZoneInfo, []));
       verifyNoMoreInteractions(mockZoneRepository);
     },
   );

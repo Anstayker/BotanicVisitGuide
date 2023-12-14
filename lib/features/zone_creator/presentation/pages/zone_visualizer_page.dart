@@ -112,7 +112,7 @@ class ZoneVisualizerPage extends StatelessWidget {
                             ),
                           );
                         },
-                        child: Text('Mapa')),
+                        child: const Text('Mapa')),
                   ],
                 ),
               ],

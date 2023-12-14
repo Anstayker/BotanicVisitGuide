@@ -1,13 +1,12 @@
-import 'package:botanic_visit_guide/features/zone_creator/domain/entities/waypoint_info.dart';
-import 'package:botanic_visit_guide/features/zone_creator/domain/entities/zone_info.dart';
-import 'package:botanic_visit_guide/features/zone_finder/domain/entities/waypoint_data.dart';
-import 'package:botanic_visit_guide/injection_container.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 
 import '../../../../core/services/geolocator_wrapper.dart';
+import '../../../../injection_container.dart';
+import '../../domain/entities/waypoint_info.dart';
 
 class MapView extends StatelessWidget {
   final List<WaypointInfo> waypointsData;
@@ -20,7 +19,7 @@ class MapView extends StatelessWidget {
         future: sl<GeolocatorWrapper>().getCurrentPosition(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator(); // Muestra un indicador de carga mientras se espera la posición
+            return const CircularProgressIndicator(); // Muestra un indicador de carga mientras se espera la posición
           } else if (snapshot.hasError) {
             return Text(
                 'Error: ${snapshot.error}'); // Muestra un mensaje de error si algo sale mal

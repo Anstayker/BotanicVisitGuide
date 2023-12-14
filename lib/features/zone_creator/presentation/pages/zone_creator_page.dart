@@ -35,6 +35,7 @@ class _ZoneCreatorPageState extends State<ZoneCreatorPage> {
   final _uuid = sl<Uuid>();
   final ImagePicker _picker = ImagePicker();
   List<XFile>? _images;
+  List<String> _imagesNames = [];
 
   String zoneName = '';
   String zoneDescription = '';
@@ -43,6 +44,7 @@ class _ZoneCreatorPageState extends State<ZoneCreatorPage> {
     final List<XFile> selectedImages = await _picker.pickMultiImage();
     setState(() {
       _images = selectedImages;
+      _imagesNames = selectedImages.map((image) => image.name).toList();
     });
   }
 
@@ -291,6 +293,7 @@ class _ZoneCreatorPageState extends State<ZoneCreatorPage> {
                     name: _zoneNameController.text,
                     waypoints: _waypointsList,
                     description: _descriptionController.text,
+                    images: _imagesNames,
                   );
                   if (_formKey.currentState!.validate()) {
                     if (newZone.waypoints.length < 3) {
@@ -304,8 +307,10 @@ class _ZoneCreatorPageState extends State<ZoneCreatorPage> {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Creando una nueva Zona')),
                       );
+                      List<File> images =
+                          _images!.map((xfile) => File(xfile.path)).toList();
                       BlocProvider.of<ZoneCreatorBloc>(context)
-                          .add(AddZoneEvent(zone: newZone));
+                          .add(AddZoneEvent(zone: newZone, images: images));
                     }
                   }
                 }

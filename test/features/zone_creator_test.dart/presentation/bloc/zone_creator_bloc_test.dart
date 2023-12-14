@@ -24,8 +24,9 @@ void main() {
     registerFallbackValue(NoParams());
     registerFallbackValue(const Params(
         zone: ZoneInfo(zoneId: '1', name: 'Zone', waypoints: [
-      WaypointInfo(waypointId: '1', latitude: 1.0, longitude: 1.0)
-    ])));
+          WaypointInfo(waypointId: '1', latitude: 1.0, longitude: 1.0)
+        ]),
+        images: []));
     mockGetAllZones = MockGetAllZones();
     mockAddZone = MockAddZone();
     bloc = ZoneCreatorBloc(
@@ -43,7 +44,8 @@ void main() {
   );
 
   group('GetAllZones', () {
-    const tWaypoints = WaypointInfo(waypointId: '1', latitude: 1.0, longitude: 1.0);
+    const tWaypoints =
+        WaypointInfo(waypointId: '1', latitude: 1.0, longitude: 1.0);
 
     const tZones = [
       ZoneInfo(zoneId: '1', name: 'Zone 1', waypoints: [tWaypoints]),
@@ -100,8 +102,10 @@ void main() {
   });
 
   group('AddZone', () {
-    const tWaypoints = WaypointInfo(waypointId: '1', latitude: 1.0, longitude: 1.0);
-    const tZone = ZoneInfo(zoneId: '1', name: 'Zone 1', waypoints: [tWaypoints]);
+    const tWaypoints =
+        WaypointInfo(waypointId: '1', latitude: 1.0, longitude: 1.0);
+    const tZone =
+        ZoneInfo(zoneId: '1', name: 'Zone 1', waypoints: [tWaypoints]);
     test(
       "should add a new Zone in the add new zone use case",
       () async {
@@ -109,10 +113,10 @@ void main() {
         when(() => mockAddZone(any()))
             .thenAnswer((_) async => const Right(null));
         // act
-        bloc.add(const AddZoneEvent(zone: tZone));
+        bloc.add(const AddZoneEvent(zone: tZone, images: []));
         await untilCalled(() => mockAddZone(any()));
         // assert
-        verify(() => mockAddZone(const Params(zone: tZone)));
+        verify(() => mockAddZone(const Params(zone: tZone, images: [])));
       },
     );
   });

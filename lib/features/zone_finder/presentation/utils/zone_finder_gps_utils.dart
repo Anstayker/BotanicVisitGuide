@@ -14,16 +14,17 @@ class ZoneFinderGPSUtils {
     final List<ZoneData> result = [];
 
     if (zonesDataList.isNotEmpty) {
-      print('No esta vacio');
+      // TODO FIX
+      //print('No esta vacio');
       var gpsCurrentPosition = await sl<GpsService>().currentPosition;
       gpsCurrentPosition.fold((l) => Exception(PermissionException), (r) {
         final currentPosition = r;
         for (var zoneData in zonesDataList) {
-          print('Estoy iterando');
+          //print('Estoy iterando');
           final waypointList = zoneData.waypoints;
-          print(currentPosition);
+          //print(currentPosition);
           if (_isPointInPolygon(waypointList, currentPosition)) {
-            print('Funciona!');
+            //print('Funciona!');
             result.add(zoneData);
           }
         }
@@ -58,7 +59,7 @@ class ZoneFinderGPSUtils {
   }
 
   bool _isPointInPolygon(List<WaypointData> polygon, Position point) {
-    print('Comprobanding');
+    //print('Comprobanding');
     bool isInside = false;
     for (int i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
       if ((polygon[i].longitude > point.longitude) !=
