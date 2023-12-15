@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -21,6 +22,7 @@ import 'features/zone_finder/data/datasources/zone_finder_remote_datasource.dart
 import 'features/zone_finder/data/repositories/zone_finder_repository_impl.dart';
 import 'features/zone_finder/domain/repositories/zone_finder_repository.dart';
 import 'features/zone_finder/domain/usecases/get_all_zones_data.dart';
+import 'features/zone_finder/domain/usecases/get_zone_audio.dart';
 import 'features/zone_finder/domain/usecases/get_zone_data.dart';
 import 'features/zone_finder/domain/usecases/get_zone_images.dart';
 import 'features/zone_finder/presentation/bloc/zone_finder_bloc.dart';
@@ -66,12 +68,14 @@ Future<void> init() async {
         getZoneData: sl(),
         gpsUtils: sl(),
         getZoneImages: sl(),
+        getZoneAudio: sl(),
       ));
 
   // Use Cases
   sl.registerLazySingleton(() => GetAllZonesData(sl()));
   sl.registerLazySingleton(() => GetZoneData(sl()));
   sl.registerLazySingleton(() => GetZoneImages(sl()));
+  sl.registerLazySingleton(() => GetZoneAudio(sl()));
 
   // Repository
   sl.registerLazySingleton<ZoneFinderRepository>(() => ZoneFinderRepositoryImpl(
@@ -105,4 +109,5 @@ Future<void> init() async {
   sl.registerLazySingleton(() => FirebaseFirestore.instance);
   sl.registerLazySingleton(() => FirebaseStorage.instance);
   sl.registerLazySingleton(() => InternetConnectionCheckerPlus());
+  sl.registerLazySingleton(() => AudioPlayer());
 }

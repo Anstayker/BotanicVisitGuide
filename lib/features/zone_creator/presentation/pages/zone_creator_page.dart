@@ -58,7 +58,6 @@ class _ZoneCreatorPageState extends State<ZoneCreatorPage> {
 
   @override
   void dispose() {
-    _audioPlayer.dispose();
     _audioRecord.dispose();
     super.dispose();
   }

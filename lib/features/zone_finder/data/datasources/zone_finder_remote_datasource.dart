@@ -8,6 +8,7 @@ abstract class ZoneFinderRemoteDataSource {
   Future<List<ZoneDataModel>> getAllZones();
   Future<ZoneDataModel> getZoneData(String zoneId);
   Future<List<String>> getZonesImages(String zoneId);
+  Future<String> getZoneAudio(String zoneId);
 }
 
 class ZoneFinderRemoteDataSourceImpl implements ZoneFinderRemoteDataSource {
@@ -50,5 +51,18 @@ class ZoneFinderRemoteDataSourceImpl implements ZoneFinderRemoteDataSource {
     }
 
     return imageUrls;
+  }
+
+  @override
+  Future<String> getZoneAudio(String zoneId) async {
+    final ListResult result = await storage.ref('zones/$zoneId').listAll();
+    String audioPath = '';
+
+    for (var i = 0; i < result.items.length; i++) {
+      audioPath = result.items[i].fullPath;
+    }
+
+    String audioUrl = await storage.ref(audioPath).getDownloadURL();
+    return audioUrl;
   }
 }

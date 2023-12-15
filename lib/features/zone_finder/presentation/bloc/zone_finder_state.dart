@@ -36,8 +36,9 @@ class ZoneImagesLoading extends ZoneFinderState {}
 
 class ZoneImagesLoadSuccess extends ZoneFinderState {
   final List<String> images;
+  final String audio;
 
-  const ZoneImagesLoadSuccess({required this.images});
+  const ZoneImagesLoadSuccess({required this.images, required this.audio});
 }
 
 class ZoneImagesLoadFailure extends ZoneFinderState {

@@ -29,7 +29,7 @@ void main() {
           zone: const ZoneInfo(zoneId: '1', name: 'Zone', waypoints: [
             WaypointInfo(waypointId: '1', latitude: 1.0, longitude: 1.0)
           ]),
-          images: [],
+          images: const [],
           audio: File('path')),
     );
     mockGetAllZones = MockGetAllZones();
@@ -118,11 +118,12 @@ void main() {
         when(() => mockAddZone(any()))
             .thenAnswer((_) async => const Right(null));
         // act
-        bloc.add(AddZoneEvent(zone: tZone, images: [], audio: File('path')));
+        bloc.add(
+            AddZoneEvent(zone: tZone, images: const [], audio: File('path')));
         await untilCalled(() => mockAddZone(any()));
         // assert
-        verify(() =>
-            mockAddZone(Params(zone: tZone, images: [], audio: File('path'))));
+        verify(() => mockAddZone(
+            Params(zone: tZone, images: const [], audio: File('path'))));
       },
     );
   });

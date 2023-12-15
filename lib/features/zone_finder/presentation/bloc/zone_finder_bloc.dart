@@ -8,6 +8,7 @@ import '../../../../core/usecases/usecase.dart';
 import '../../domain/entities/zone_data.dart';
 import '../../domain/usecases/get_all_zones_data.dart';
 import '../../domain/usecases/get_zone_images.dart' as get_img;
+import '../../domain/usecases/get_zone_audio.dart' as get_aud;
 
 part 'zone_finder_event.dart';
 part 'zone_finder_state.dart';
@@ -17,12 +18,14 @@ class ZoneFinderBloc extends Bloc<ZoneFinderEvent, ZoneFinderState> {
   final GetZoneData getZoneData;
   final ZoneFinderGPSUtils gpsUtils;
   final get_img.GetZoneImages getZoneImages;
+  final get_aud.GetZoneAudio getZoneAudio;
 
   ZoneFinderBloc({
     required this.getAllZonesData,
     required this.getZoneData,
     required this.gpsUtils,
     required this.getZoneImages,
+    required this.getZoneAudio,
   }) : super(ZoneFinderInitial()) {
     on<GetAllZonesEvent>((event, emit) async {
       emit(ZonesLoading());
@@ -48,11 +51,17 @@ class ZoneFinderBloc extends Bloc<ZoneFinderEvent, ZoneFinderState> {
       emit(ZoneImagesLoading());
 
       final result = await getZoneImages(get_img.Params(zoneId: event.zoneId));
+      final resultAudio =
+          await getZoneAudio(get_aud.Params(zoneId: event.zoneId));
 
       result.fold(
         (failure) =>
             emit(const ZoneImagesLoadFailure(message: 'Image loading failed')),
-        (imageUrls) => emit(ZoneImagesLoadSuccess(images: imageUrls)),
+        (imageUrls) => resultAudio.fold(
+            (failure) => emit(
+                const ZoneImagesLoadFailure(message: 'Audio loading failed')),
+            (audioUrl) => emit(
+                ZoneImagesLoadSuccess(images: imageUrls, audio: audioUrl))),
       );
     });
   }

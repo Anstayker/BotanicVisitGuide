@@ -87,4 +87,18 @@ class ZoneFinderRepositoryImpl implements ZoneFinderRepository {
       return left(ServerFailure());
     }
   }
+
+  @override
+  Future<Either<Failure, String>> getZoneAudio(String zoneId) async {
+    if (await networkInfo.isConnected) {
+      try {
+        final audioUrl = await remoteDataSource.getZoneAudio(zoneId);
+        return right(audioUrl);
+      } on exception.ServerException {
+        return left(ServerFailure());
+      }
+    } else {
+      return left(ServerFailure());
+    }
+  }
 }

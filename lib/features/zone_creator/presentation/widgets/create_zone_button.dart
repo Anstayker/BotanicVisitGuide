@@ -44,7 +44,9 @@ class CreateZoneButton extends StatelessWidget {
                       final newZone = _newZone;
                       BlocProvider.of<ZoneCreatorBloc>(context).add(
                           AddZoneEvent(
-                              zone: newZone, images: [], audio: File('path')));
+                              zone: newZone,
+                              images: const [],
+                              audio: File('path')));
                     }
                   }
                 }

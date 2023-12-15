@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 
 import '../../domain/entities/zone_data.dart';
@@ -5,8 +8,12 @@ import '../../domain/entities/zone_data.dart';
 class ZoneFinderDetailsArgs {
   final ZoneData zoneData;
   final List<String>? imageUrls;
+  final String? audioUrl;
 
-  ZoneFinderDetailsArgs({required this.zoneData, required this.imageUrls});
+  ZoneFinderDetailsArgs(
+      {required this.zoneData,
+      required this.imageUrls,
+      required this.audioUrl});
 }
 
 class ZoneFinderDetailsPage extends StatefulWidget {
@@ -19,7 +26,45 @@ class ZoneFinderDetailsPage extends StatefulWidget {
 }
 
 class _ZoneFinderDetailsPageState extends State<ZoneFinderDetailsPage> {
-  var _currentSliderValue = 0.0;
+  late AudioPlayer audioPlayer;
+  bool _isPlaying = false;
+  StreamSubscription<Duration>? _positionSubscription;
+  StreamSubscription<Duration>? _durationSubscription;
+  StreamSubscription<void>? _playerFinishedPlayingSubscription;
+  Duration _audioDuration = Duration.zero;
+  Duration _currentPosition = Duration.zero;
+
+  @override
+  void initState() {
+    super.initState();
+    audioPlayer = AudioPlayer();
+    _positionSubscription = audioPlayer.onPositionChanged.listen((position) {
+      setState(() {
+        _currentPosition = position;
+      });
+    });
+    _durationSubscription = audioPlayer.onDurationChanged.listen((duration) {
+      setState(() {
+        _audioDuration = duration;
+      });
+    });
+    _playerFinishedPlayingSubscription =
+        audioPlayer.onPlayerComplete.listen((event) {
+      setState(() {
+        _isPlaying = false;
+        _currentPosition = Duration.zero;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _positionSubscription?.cancel();
+    _durationSubscription?.cancel();
+    _playerFinishedPlayingSubscription?.cancel();
+    audioPlayer.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,11 +89,6 @@ class _ZoneFinderDetailsPageState extends State<ZoneFinderDetailsPage> {
         : icons.map((icon) => Icon(icon)).toList();
 
     String notificationLongText = '${zoneData.zoneDescription}';
-
-    print('Lista comleta');
-    print(imageUrls);
-    print('Lista de 2');
-    print(imagesOrIcons);
 
     return Scaffold(
       appBar: AppBar(
@@ -80,27 +120,47 @@ class _ZoneFinderDetailsPageState extends State<ZoneFinderDetailsPage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              reproducerText('00:00'),
+              reproducerText(formatDuration(_currentPosition)),
               Expanded(
                 child: Slider(
                   activeColor: Colors.white,
                   inactiveColor: Colors.grey,
-                  value: _currentSliderValue,
+                  value: _currentPosition.inSeconds.toDouble(),
                   min: 0,
-                  max: 100,
+                  max: _audioDuration.inSeconds.toDouble(),
                   onChanged: (double value) {
                     setState(() {
-                      _currentSliderValue = value;
+                      audioPlayer.seek(Duration(seconds: value.toInt()));
                     });
                   },
                 ),
               ),
-              reproducerText('03:30'),
+              reproducerText(formatDuration(_audioDuration)),
               IconButton(
-                icon: const Icon(Icons.pause, color: Colors.white),
-                onPressed: () {
-                  // Acción al presionar el botón
-                },
+                icon: Icon(
+                  _isPlaying ? Icons.pause : Icons.play_arrow,
+                  color: Colors
+                      .white, // Asegura que el color del ícono siempre sea blanco
+                ),
+                onPressed: () async {
+                  if (widget.args.audioUrl != null &&
+                      widget.args.audioUrl!.isNotEmpty) {
+                    if (_isPlaying) {
+                      audioPlayer.pause();
+                    } else {
+                      await audioPlayer.play(UrlSource(widget.args.audioUrl!));
+                    }
+                    setState(() {
+                      _isPlaying = !_isPlaying;
+                    });
+                  } else {
+                    // Opcional: Muestra un mensaje al usuario si la URL del audio es null o vacía
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                          content: Text('No hay audio para reproducir')),
+                    );
+                  }
+                }, //
               ),
             ],
           ),
@@ -154,15 +214,37 @@ class _ZoneFinderDetailsPageState extends State<ZoneFinderDetailsPage> {
             ],
           ),
           FloatingActionButton(
-            onPressed: () {
-              // Acción al presionar el botón
+            onPressed: () async {
+              if (widget.args.audioUrl != null &&
+                  widget.args.audioUrl!.isNotEmpty) {
+                if (_isPlaying) {
+                  audioPlayer.pause();
+                } else {
+                  await audioPlayer.play(UrlSource(widget.args.audioUrl!));
+                }
+                setState(() {
+                  _isPlaying = !_isPlaying;
+                });
+              } else {
+                // Opcional: Muestra un mensaje al usuario si la URL del audio es null o vacía
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('No hay audio para reproducir')),
+                );
+              }
             }, // Icono del botón
             backgroundColor: Colors.black,
-            child: const Icon(Icons.play_arrow), // Color del botón
+            child: Icon(
+                _isPlaying ? Icons.pause : Icons.play_arrow), // Color del botón
           ),
         ],
       ),
     );
+  }
+
+  String formatDuration(Duration duration) {
+    final minutes = duration.inMinutes.toString().padLeft(2, '0');
+    final seconds = (duration.inSeconds % 60).toString().padLeft(2, '0');
+    return '$minutes:$seconds';
   }
 
   Widget imagenCarusel(List<Widget> widgets, List<Color> colors) {

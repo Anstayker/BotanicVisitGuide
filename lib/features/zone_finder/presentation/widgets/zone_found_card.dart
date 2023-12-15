@@ -5,15 +5,18 @@ import '../../../../config/routes/app_routes.dart';
 import '../pages/zone_finder_details.dart';
 
 class ZoneFoundCard extends StatelessWidget {
-  const ZoneFoundCard(
-      {super.key,
-      required this.context,
-      required this.zoneData,
-      this.imageUrls});
+  const ZoneFoundCard({
+    super.key,
+    required this.context,
+    required this.zoneData,
+    this.imageUrls,
+    this.audioUrl,
+  });
 
   final ZoneData zoneData;
   final BuildContext context;
   final List<String>? imageUrls;
+  final String? audioUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +42,9 @@ class ZoneFoundCard extends StatelessWidget {
           onTap: () {
             Navigator.pushNamed(context, AppRoutes.zoneFinderDetails,
                 arguments: ZoneFinderDetailsArgs(
-                    zoneData: zoneData, imageUrls: imageUrls));
+                    zoneData: zoneData,
+                    imageUrls: imageUrls,
+                    audioUrl: audioUrl));
           },
         ),
       ),

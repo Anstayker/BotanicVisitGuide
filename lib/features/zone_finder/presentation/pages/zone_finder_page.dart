@@ -86,6 +86,7 @@ class ZoneFinderPage extends StatelessWidget {
       return SliverList(
         delegate: SliverChildBuilderDelegate(
           (BuildContext context, int index) {
+            // TODO implement zone card audio and images
             return ActiveZoneCard(
                 context: context, zoneData: zonesActive[index]);
           },
@@ -132,8 +133,8 @@ class ZoneFinderPage extends StatelessWidget {
                       return ZoneFoundCard(
                         zoneData: zonesFound[index],
                         context: context,
-                        imageUrls: state
-                            .images, // Pasar las URLs de las imágenes a ZoneFoundCard
+                        imageUrls: state.images,
+                        audioUrl: state.audio,
                       );
                     }
                     return ZoneFoundCard(

@@ -10,11 +10,13 @@ class ActiveZoneCard extends StatelessWidget {
     required this.context,
     required this.zoneData,
     this.imageUrls,
+    this.audioUrl,
   });
 
   final BuildContext context;
   final ZoneData zoneData;
   final List<String>? imageUrls;
+  final String? audioUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +27,8 @@ class ActiveZoneCard extends StatelessWidget {
           Navigator.pushNamed(
             context,
             AppRoutes.zoneFinderDetails,
-            arguments:
-                ZoneFinderDetailsArgs(zoneData: zoneData, imageUrls: imageUrls),
+            arguments: ZoneFinderDetailsArgs(
+                zoneData: zoneData, imageUrls: imageUrls, audioUrl: audioUrl),
           );
         },
         child: Card(
