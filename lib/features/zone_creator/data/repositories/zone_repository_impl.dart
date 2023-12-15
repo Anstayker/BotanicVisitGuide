@@ -23,11 +23,11 @@ class ZoneRepositoryImpl implements ZoneRepository {
 
   @override
   Future<Either<Failure, void>> addZone(
-      ZoneInfo newZone, List<File>? images) async {
+      ZoneInfo newZone, List<File>? images, File? audio) async {
     if (await networkInfo.isConnected) {
       try {
         ZoneInfoModel zoneModel = ZoneInfoModel.fromEntity(newZone);
-        await remoteDatasource.addNewZone(zoneModel, images);
+        await remoteDatasource.addNewZone(zoneModel, images, audio);
         return Future.value(right(null));
       } on ServerException {
         return Future.value(left(ServerFailure()));

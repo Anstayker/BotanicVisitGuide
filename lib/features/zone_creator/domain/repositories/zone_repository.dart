@@ -7,5 +7,6 @@ import '../entities/zone_info.dart';
 
 abstract class ZoneRepository {
   Future<Either<Failure, List<ZoneInfo>>> getAllZones();
-  Future<Either<Failure, void>> addZone(ZoneInfo zone, List<File>? images);
+  Future<Either<Failure, void>> addZone(
+      ZoneInfo zone, List<File>? images, File? audio);
 }

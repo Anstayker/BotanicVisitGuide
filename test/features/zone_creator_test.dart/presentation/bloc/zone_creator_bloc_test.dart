@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:botanic_visit_guide/core/constants/constants.dart';
 import 'package:botanic_visit_guide/core/errors/failures.dart';
 import 'package:dartz/dartz.dart';
@@ -22,11 +24,14 @@ void main() {
 
   setUp(() {
     registerFallbackValue(NoParams());
-    registerFallbackValue(const Params(
-        zone: ZoneInfo(zoneId: '1', name: 'Zone', waypoints: [
-          WaypointInfo(waypointId: '1', latitude: 1.0, longitude: 1.0)
-        ]),
-        images: []));
+    registerFallbackValue(
+      Params(
+          zone: const ZoneInfo(zoneId: '1', name: 'Zone', waypoints: [
+            WaypointInfo(waypointId: '1', latitude: 1.0, longitude: 1.0)
+          ]),
+          images: [],
+          audio: File('path')),
+    );
     mockGetAllZones = MockGetAllZones();
     mockAddZone = MockAddZone();
     bloc = ZoneCreatorBloc(
@@ -113,10 +118,11 @@ void main() {
         when(() => mockAddZone(any()))
             .thenAnswer((_) async => const Right(null));
         // act
-        bloc.add(const AddZoneEvent(zone: tZone, images: []));
+        bloc.add(AddZoneEvent(zone: tZone, images: [], audio: File('path')));
         await untilCalled(() => mockAddZone(any()));
         // assert
-        verify(() => mockAddZone(const Params(zone: tZone, images: [])));
+        verify(() =>
+            mockAddZone(Params(zone: tZone, images: [], audio: File('path'))));
       },
     );
   });

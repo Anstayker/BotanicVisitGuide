@@ -31,8 +31,8 @@ class ZoneCreatorBloc extends Bloc<ZoneCreatorEvent, ZoneCreatorState> {
 
     on<AddZoneEvent>((event, emit) async {
       emit(ZoneAddSubmiting());
-      final result =
-          await addZone(Params(zone: event.zone, images: event.images));
+      final result = await addZone(
+          Params(zone: event.zone, images: event.images, audio: event.audio));
       result
           .fold((failure) => const ZoneAddFailure(message: cacheFailureMessage),
               (_) async {

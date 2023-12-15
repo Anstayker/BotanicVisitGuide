@@ -14,7 +14,7 @@ class AddZone implements UseCase<void, Params> {
 
   @override
   Future<Either<Failure, void>> call(params) async {
-    await repository.addZone(params.zone, params.images);
+    await repository.addZone(params.zone, params.images, params.audio);
     return const Right(null);
   }
 }
@@ -22,8 +22,9 @@ class AddZone implements UseCase<void, Params> {
 class Params extends Equatable {
   final ZoneInfo zone;
   final List<File> images;
+  final File? audio;
 
-  const Params({required this.zone, required this.images});
+  const Params({required this.zone, required this.images, required this.audio});
 
   @override
   List<Object?> get props => [zone];

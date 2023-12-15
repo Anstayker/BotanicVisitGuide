@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:botanic_visit_guide/features/home/presentation/pages/home_page.dart';
 import 'package:flutter/material.dart';
 
@@ -16,6 +17,9 @@ import '../../domain/entities/waypoint_info.dart';
 import '../../domain/entities/zone_info.dart';
 import '../bloc/bloc.dart';
 import '../widgets/widgets.dart';
+
+import 'package:record/record.dart';
+import 'package:path/path.dart' as path;
 
 class ZoneCreatorPage extends StatefulWidget {
   const ZoneCreatorPage({super.key});
@@ -37,8 +41,58 @@ class _ZoneCreatorPageState extends State<ZoneCreatorPage> {
   List<XFile>? _images;
   List<String> _imagesNames = [];
 
+  late Record _audioRecord;
+  late AudioPlayer _audioPlayer;
+  bool _isRecording = false;
+  String audioPath = '';
+
   String zoneName = '';
   String zoneDescription = '';
+
+  @override
+  void initState() {
+    _audioPlayer = AudioPlayer();
+    _audioRecord = Record();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _audioPlayer.dispose();
+    _audioRecord.dispose();
+    super.dispose();
+  }
+
+  Future<void> _startRecording() async {
+    try {
+      if (await _audioRecord.hasPermission()) {
+        await _audioRecord.start();
+        setState(() {
+          _isRecording = true;
+        });
+      }
+      // ignore: empty_catches
+    } catch (e) {}
+  }
+
+  Future<void> _stopRecording() async {
+    try {
+      String? result = await _audioRecord.stop();
+      setState(() {
+        _isRecording = false;
+        audioPath = result!;
+      });
+      // ignore: empty_catches
+    } catch (e) {}
+  }
+
+  Future<void> _playRecording() async {
+    try {
+      Source urlSource = UrlSource(audioPath);
+      await _audioPlayer.play(urlSource);
+      // ignore: empty_catches
+    } catch (e) {}
+  }
 
   Future<void> _selectImages() async {
     final List<XFile> selectedImages = await _picker.pickMultiImage();
@@ -155,6 +209,17 @@ class _ZoneCreatorPageState extends State<ZoneCreatorPage> {
               title: 'Añadir audio',
               verticalPadding: 16.0,
             ),
+
+            if (_isRecording) const Text('Recording in progress'),
+            ElevatedButton(
+                onPressed: _isRecording ? _stopRecording : _startRecording,
+                child:
+                    _isRecording ? const Text('Stop') : const Text('Record')),
+            _formSizedBox(),
+            if (!_isRecording && audioPath.isNotEmpty)
+              ElevatedButton(
+                  onPressed: _playRecording, child: const Text('Play')),
+
             const ZoneCreatorTitle(
               title: 'Añadir imagenes',
               verticalPadding: 16.0,
@@ -294,6 +359,7 @@ class _ZoneCreatorPageState extends State<ZoneCreatorPage> {
                     waypoints: _waypointsList,
                     description: _descriptionController.text,
                     images: _imagesNames,
+                    audio: path.basename(audioPath),
                   );
                   if (_formKey.currentState!.validate()) {
                     if (newZone.waypoints.length < 3) {
@@ -312,8 +378,11 @@ class _ZoneCreatorPageState extends State<ZoneCreatorPage> {
                         images =
                             _images!.map((xfile) => File(xfile.path)).toList();
                       }
-                      BlocProvider.of<ZoneCreatorBloc>(context)
-                          .add(AddZoneEvent(zone: newZone, images: images));
+                      BlocProvider.of<ZoneCreatorBloc>(context).add(
+                          AddZoneEvent(
+                              zone: newZone,
+                              images: images,
+                              audio: File(audioPath)));
                     }
                   }
                 }

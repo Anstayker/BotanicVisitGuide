@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -40,8 +42,9 @@ class CreateZoneButton extends StatelessWidget {
                         const SnackBar(content: Text('Creando una nueva Zona')),
                       );
                       final newZone = _newZone;
-                      BlocProvider.of<ZoneCreatorBloc>(context)
-                          .add(AddZoneEvent(zone: newZone, images: []));
+                      BlocProvider.of<ZoneCreatorBloc>(context).add(
+                          AddZoneEvent(
+                              zone: newZone, images: [], audio: File('path')));
                     }
                   }
                 }

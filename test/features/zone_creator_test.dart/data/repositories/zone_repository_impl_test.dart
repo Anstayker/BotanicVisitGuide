@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:botanic_visit_guide/core/errors/failures.dart';
 import 'package:botanic_visit_guide/core/network/network_info.dart';
 import 'package:botanic_visit_guide/features/zone_creator/data/datasources/local/zone_creator_local_datasource.dart';
@@ -90,7 +92,7 @@ void main() {
       when(() => mockLocalDataSource.addZone(tZoneModel))
           .thenAnswer((_) async => true);
 
-      final result = await repository.addZone(tZoneInfo, []);
+      final result = await repository.addZone(tZoneInfo, [], File('path'));
 
       expect(result, equals(left(NetworkFailure())));
     });
@@ -103,7 +105,7 @@ void main() {
       when(() => mockRemoteDataSource.addNewZone(tZoneModel, []))
           .thenAnswer((_) async => true);
       // act
-      final result = await repository.addZone(tZoneInfo, []);
+      final result = await repository.addZone(tZoneInfo, [], null);
       // assert
       verify(() => mockRemoteDataSource.addNewZone(tZoneModel, [])).called(1);
       expect(result, equals(right(null)));
@@ -114,7 +116,7 @@ void main() {
       // arrange
       when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => false);
       // act
-      final result = await repository.addZone(tZoneInfo, []);
+      final result = await repository.addZone(tZoneInfo, [], File('path'));
       // assert
       expect(result, equals(left(NetworkFailure())));
     });

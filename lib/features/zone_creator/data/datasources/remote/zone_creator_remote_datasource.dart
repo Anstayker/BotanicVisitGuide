@@ -8,7 +8,8 @@ import '../../../../../core/errors/exceptions.dart';
 import '../../models/zone_info_model.dart';
 
 abstract class ZoneCreatorRemoteDatasource {
-  Future<bool> addNewZone(ZoneInfoModel zone, [List<File>? images]);
+  Future<bool> addNewZone(ZoneInfoModel zone,
+      [List<File>? images, File? audio]);
   Future<bool> deleteZone(String zoneId);
   Future<bool> updateZone(ZoneInfoModel zone);
   Future<List<ZoneInfoModel>> getAllZones();
@@ -23,7 +24,8 @@ class ZoneCreatorRemoteDatasourceImpl implements ZoneCreatorRemoteDatasource {
       {required this.firestore, required this.storage});
 
   @override
-  Future<bool> addNewZone(ZoneInfoModel zone, [List<File>? images]) async {
+  Future<bool> addNewZone(ZoneInfoModel zone,
+      [List<File>? images, File? audioFile]) async {
     try {
       // Crear una lista para almacenar las URLs de las imágenes
       List<String> imageUrls = [];
@@ -44,6 +46,19 @@ class ZoneCreatorRemoteDatasourceImpl implements ZoneCreatorRemoteDatasource {
           // Agregar la URL de la imagen a la lista
           imageUrls.add(imageUrl);
         }
+      }
+
+      // Subir el archivo de audio a Firebase Storage si se proporcionó
+      if (audioFile != null) {
+        final firebaseStorageRef = storage
+            .ref()
+            .child('zones/${zone.zoneId}/${path.basename(audioFile.path)}');
+        UploadTask uploadTask = firebaseStorageRef.putFile(audioFile);
+
+        // Esperar a que la tarea de subida se complete
+        await uploadTask;
+
+        // Obtener la URL del audio subido
       }
 
       // Agregar las URLs de las imágenes al objeto Zone

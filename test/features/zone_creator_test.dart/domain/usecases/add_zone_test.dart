@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:botanic_visit_guide/features/zone_creator/domain/entities/waypoint_info.dart';
 import 'package:botanic_visit_guide/features/zone_creator/domain/entities/zone_info.dart';
 import 'package:botanic_visit_guide/features/zone_creator/domain/repositories/zone_repository.dart';
@@ -27,13 +29,14 @@ void main() {
     "should add a zone to the repository",
     () async {
       // arrange
-      when(() => mockZoneRepository.addZone(tZoneInfo, []))
+      when(() => mockZoneRepository.addZone(tZoneInfo, [], null))
           .thenAnswer((_) async => const Right(null));
       // act
-      final result = await addZone(const Params(zone: tZoneInfo, images: []));
+      final result =
+          await addZone(const Params(zone: tZoneInfo, images: [], audio: null));
       // assert
       expect(result, const Right(null));
-      verify(() => mockZoneRepository.addZone(tZoneInfo, []));
+      verify(() => mockZoneRepository.addZone(tZoneInfo, [], null));
       verifyNoMoreInteractions(mockZoneRepository);
     },
   );

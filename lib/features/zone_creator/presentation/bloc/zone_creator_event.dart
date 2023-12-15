@@ -10,8 +10,10 @@ sealed class ZoneCreatorEvent extends Equatable {
 class AddZoneEvent extends ZoneCreatorEvent {
   final ZoneInfo zone;
   final List<File> images;
+  final File audio;
 
-  const AddZoneEvent({required this.zone, required this.images});
+  const AddZoneEvent(
+      {required this.zone, required this.images, required this.audio});
 }
 
 class GetAllZonesEvent extends ZoneCreatorEvent {}
