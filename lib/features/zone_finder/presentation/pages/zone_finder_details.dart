@@ -33,6 +33,8 @@ class _ZoneFinderDetailsPageState extends State<ZoneFinderDetailsPage> {
   StreamSubscription<void>? _playerFinishedPlayingSubscription;
   Duration _audioDuration = Duration.zero;
   Duration _currentPosition = Duration.zero;
+  double _bottomBarHeight = 64.0;
+  bool _bottombarVisible = false;
 
   @override
   void initState() {
@@ -111,58 +113,69 @@ class _ZoneFinderDetailsPageState extends State<ZoneFinderDetailsPage> {
   }
 
   Widget bottomAppBar() {
-    return BottomAppBar(
-      color: Colors.black,
-      child: SizedBox(
-        height: 64.0,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              reproducerText(formatDuration(_currentPosition)),
-              Expanded(
-                child: Slider(
-                  activeColor: Colors.white,
-                  inactiveColor: Colors.grey,
-                  value: _currentPosition.inSeconds.toDouble(),
-                  min: 0,
-                  max: _audioDuration.inSeconds.toDouble(),
-                  onChanged: (double value) {
-                    setState(() {
-                      audioPlayer.seek(Duration(seconds: value.toInt()));
-                    });
-                  },
-                ),
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
+      height: _bottombarVisible ? _bottomBarHeight : 0.0,
+      child: Visibility(
+        visible: _bottombarVisible,
+        maintainState: true,
+        child: BottomAppBar(
+          color: Colors.black,
+          child: SizedBox(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  reproducerText(formatDuration(_currentPosition)),
+                  Expanded(
+                    child: Slider(
+                      activeColor: Colors.white,
+                      inactiveColor: Colors.grey,
+                      value: _currentPosition.inSeconds.toDouble(),
+                      min: 0,
+                      max: _audioDuration.inSeconds.toDouble(),
+                      onChanged: (double value) {
+                        setState(() {
+                          audioPlayer.seek(Duration(seconds: value.toInt()));
+                        });
+                      },
+                    ),
+                  ),
+                  reproducerText(formatDuration(_audioDuration)),
+                  IconButton(
+                    icon: Icon(
+                      _isPlaying ? Icons.pause : Icons.play_arrow,
+                      color: Colors
+                          .white, // Asegura que el color del ícono siempre sea blanco
+                    ),
+                    onPressed: () async {
+                      if (widget.args.audioUrl != null &&
+                          widget.args.audioUrl!.isNotEmpty) {
+                        if (_isPlaying) {
+                          audioPlayer.pause();
+                        } else {
+                          await audioPlayer
+                              .play(UrlSource(widget.args.audioUrl!));
+                          setState(() {
+                            _bottombarVisible = true;
+                          });
+                        }
+                        setState(() {
+                          _isPlaying = !_isPlaying;
+                        });
+                      } else {
+                        // Opcional: Muestra un mensaje al usuario si la URL del audio es null o vacía
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                              content: Text('No hay audio para reproducir')),
+                        );
+                      }
+                    }, //
+                  ),
+                ],
               ),
-              reproducerText(formatDuration(_audioDuration)),
-              IconButton(
-                icon: Icon(
-                  _isPlaying ? Icons.pause : Icons.play_arrow,
-                  color: Colors
-                      .white, // Asegura que el color del ícono siempre sea blanco
-                ),
-                onPressed: () async {
-                  if (widget.args.audioUrl != null &&
-                      widget.args.audioUrl!.isNotEmpty) {
-                    if (_isPlaying) {
-                      audioPlayer.pause();
-                    } else {
-                      await audioPlayer.play(UrlSource(widget.args.audioUrl!));
-                    }
-                    setState(() {
-                      _isPlaying = !_isPlaying;
-                    });
-                  } else {
-                    // Opcional: Muestra un mensaje al usuario si la URL del audio es null o vacía
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                          content: Text('No hay audio para reproducir')),
-                    );
-                  }
-                }, //
-              ),
-            ],
+            ),
           ),
         ),
       ),
@@ -221,6 +234,9 @@ class _ZoneFinderDetailsPageState extends State<ZoneFinderDetailsPage> {
                   audioPlayer.pause();
                 } else {
                   await audioPlayer.play(UrlSource(widget.args.audioUrl!));
+                  setState(() {
+                    _bottombarVisible = true;
+                  });
                 }
                 setState(() {
                   _isPlaying = !_isPlaying;
