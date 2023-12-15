@@ -30,4 +30,20 @@ class ZonesLoadFailure extends ZoneFinderState {
   const ZonesLoadFailure({required this.message});
 }
 
+// ! Get Zone images by ID
+
+class ZoneImagesLoading extends ZoneFinderState {}
+
+class ZoneImagesLoadSuccess extends ZoneFinderState {
+  final List<String> images;
+
+  const ZoneImagesLoadSuccess({required this.images});
+}
+
+class ZoneImagesLoadFailure extends ZoneFinderState {
+  final String message;
+
+  const ZoneImagesLoadFailure({required this.message});
+}
+
 // ! Get Zone data by ID

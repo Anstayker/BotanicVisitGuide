@@ -7,6 +7,7 @@ import '../models/zone_data_model.dart';
 abstract class ZoneFinderRemoteDataSource {
   Future<List<ZoneDataModel>> getAllZones();
   Future<ZoneDataModel> getZoneData(String zoneId);
+  Future<List<String>> getZonesImages(String zoneId);
 }
 
 class ZoneFinderRemoteDataSourceImpl implements ZoneFinderRemoteDataSource {
@@ -35,5 +36,19 @@ class ZoneFinderRemoteDataSourceImpl implements ZoneFinderRemoteDataSource {
     } else {
       throw NotFoundException('Zone not found');
     }
+  }
+
+  @override
+  Future<List<String>> getZonesImages(String zoneId) async {
+    List<String> imageUrls = [];
+
+    final ListResult result = await storage.ref('zones/$zoneId').listAll();
+
+    for (var item in result.items) {
+      String url = await item.getDownloadURL();
+      imageUrls.add(url);
+    }
+
+    return imageUrls;
   }
 }

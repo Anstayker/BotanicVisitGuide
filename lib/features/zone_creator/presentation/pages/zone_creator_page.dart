@@ -307,8 +307,11 @@ class _ZoneCreatorPageState extends State<ZoneCreatorPage> {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Creando una nueva Zona')),
                       );
-                      List<File> images =
-                          _images!.map((xfile) => File(xfile.path)).toList();
+                      List<File> images = [];
+                      if (_images != null) {
+                        images =
+                            _images!.map((xfile) => File(xfile.path)).toList();
+                      }
                       BlocProvider.of<ZoneCreatorBloc>(context)
                           .add(AddZoneEvent(zone: newZone, images: images));
                     }

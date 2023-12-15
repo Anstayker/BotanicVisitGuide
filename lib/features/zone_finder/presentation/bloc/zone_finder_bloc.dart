@@ -7,6 +7,7 @@ import '../../../../core/constants/constants.dart';
 import '../../../../core/usecases/usecase.dart';
 import '../../domain/entities/zone_data.dart';
 import '../../domain/usecases/get_all_zones_data.dart';
+import '../../domain/usecases/get_zone_images.dart' as get_img;
 
 part 'zone_finder_event.dart';
 part 'zone_finder_state.dart';
@@ -15,11 +16,13 @@ class ZoneFinderBloc extends Bloc<ZoneFinderEvent, ZoneFinderState> {
   final GetAllZonesData getAllZonesData;
   final GetZoneData getZoneData;
   final ZoneFinderGPSUtils gpsUtils;
+  final get_img.GetZoneImages getZoneImages;
 
   ZoneFinderBloc({
     required this.getAllZonesData,
     required this.getZoneData,
     required this.gpsUtils,
+    required this.getZoneImages,
   }) : super(ZoneFinderInitial()) {
     on<GetAllZonesEvent>((event, emit) async {
       emit(ZonesLoading());
@@ -39,6 +42,18 @@ class ZoneFinderBloc extends Bloc<ZoneFinderEvent, ZoneFinderState> {
 
     on<GetZoneDataEvent>((event, emit) {
       // TODO: implement event handler
+    });
+
+    on<GetZoneImagesEvent>((event, emit) async {
+      emit(ZoneImagesLoading());
+
+      final result = await getZoneImages(get_img.Params(zoneId: event.zoneId));
+
+      result.fold(
+        (failure) =>
+            emit(const ZoneImagesLoadFailure(message: 'Image loading failed')),
+        (imageUrls) => emit(ZoneImagesLoadSuccess(images: imageUrls)),
+      );
     });
   }
 }

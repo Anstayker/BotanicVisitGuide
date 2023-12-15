@@ -22,6 +22,7 @@ import 'features/zone_finder/data/repositories/zone_finder_repository_impl.dart'
 import 'features/zone_finder/domain/repositories/zone_finder_repository.dart';
 import 'features/zone_finder/domain/usecases/get_all_zones_data.dart';
 import 'features/zone_finder/domain/usecases/get_zone_data.dart';
+import 'features/zone_finder/domain/usecases/get_zone_images.dart';
 import 'features/zone_finder/presentation/bloc/zone_finder_bloc.dart';
 import 'features/zone_finder/presentation/utils/zone_finder_gps_utils.dart';
 import 'firebase_options.dart';
@@ -64,11 +65,13 @@ Future<void> init() async {
         getAllZonesData: sl(),
         getZoneData: sl(),
         gpsUtils: sl(),
+        getZoneImages: sl(),
       ));
 
   // Use Cases
   sl.registerLazySingleton(() => GetAllZonesData(sl()));
   sl.registerLazySingleton(() => GetZoneData(sl()));
+  sl.registerLazySingleton(() => GetZoneImages(sl()));
 
   // Repository
   sl.registerLazySingleton<ZoneFinderRepository>(() => ZoneFinderRepositoryImpl(

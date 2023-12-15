@@ -73,4 +73,18 @@ class ZoneFinderRepositoryImpl implements ZoneFinderRepository {
       audio: zoneModel.audio,
     );
   }
+
+  @override
+  Future<Either<Failure, List<String>>> getZoneImages(String zoneId) async {
+    if (await networkInfo.isConnected) {
+      try {
+        final imageUrls = await remoteDataSource.getZonesImages(zoneId);
+        return right(imageUrls);
+      } on exception.ServerException {
+        return left(ServerFailure());
+      }
+    } else {
+      return left(ServerFailure());
+    }
+  }
 }

@@ -5,6 +5,7 @@ import 'package:botanic_visit_guide/features/zone_finder/domain/entities/waypoin
 import 'package:botanic_visit_guide/features/zone_finder/domain/entities/zone_data.dart';
 import 'package:botanic_visit_guide/features/zone_finder/domain/usecases/get_all_zones_data.dart';
 import 'package:botanic_visit_guide/features/zone_finder/domain/usecases/get_zone_data.dart';
+import 'package:botanic_visit_guide/features/zone_finder/domain/usecases/get_zone_images.dart';
 import 'package:botanic_visit_guide/features/zone_finder/presentation/bloc/zone_finder_bloc.dart';
 import 'package:botanic_visit_guide/features/zone_finder/presentation/utils/zone_finder_gps_utils.dart';
 import 'package:dartz/dartz.dart';
@@ -17,21 +18,26 @@ class MockGetZoneData extends Mock implements GetZoneData {}
 
 class MockGPSUtils extends Mock implements ZoneFinderGPSUtils {}
 
+class MockZoneFinderImages extends Mock implements GetZoneImages {}
+
 void main() {
   late GetAllZonesData getAllZonesData;
   late GetZoneData getZoneData;
   late ZoneFinderBloc bloc;
   late ZoneFinderGPSUtils gpsUtils;
+  late GetZoneImages getZoneImages;
 
   setUp(() {
     registerFallbackValue(NoParams());
     getAllZonesData = MockGetAllZonesData();
     getZoneData = MockGetZoneData();
     gpsUtils = MockGPSUtils();
+    getZoneImages = MockZoneFinderImages();
     bloc = ZoneFinderBloc(
       getAllZonesData: getAllZonesData,
       getZoneData: getZoneData,
       gpsUtils: gpsUtils,
+      getZoneImages: getZoneImages,
     );
   });
 

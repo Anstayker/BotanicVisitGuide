@@ -14,3 +14,9 @@ class GetZoneDataEvent extends ZoneFinderEvent {
 
   const GetZoneDataEvent({required this.zoneId});
 }
+
+class GetZoneImagesEvent extends ZoneFinderEvent {
+  final String zoneId;
+
+  const GetZoneImagesEvent({required this.zoneId});
+}

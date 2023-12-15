@@ -4,8 +4,9 @@ import '../../domain/entities/zone_data.dart';
 
 class ZoneFinderDetailsArgs {
   final ZoneData zoneData;
+  final List<String>? imageUrls;
 
-  ZoneFinderDetailsArgs({required this.zoneData});
+  ZoneFinderDetailsArgs({required this.zoneData, required this.imageUrls});
 }
 
 class ZoneFinderDetailsPage extends StatefulWidget {
@@ -36,7 +37,18 @@ class _ZoneFinderDetailsPageState extends State<ZoneFinderDetailsPage> {
       Colors.red,
     ];
 
+    final imageUrls = widget.args.imageUrls;
+
+    final List<Widget> imagesOrIcons = imageUrls != null && imageUrls.isNotEmpty
+        ? imageUrls.map((url) => Image.network(url)).toList()
+        : icons.map((icon) => Icon(icon)).toList();
+
     String notificationLongText = '${zoneData.zoneDescription}';
+
+    print('Lista comleta');
+    print(imageUrls);
+    print('Lista de 2');
+    print(imagesOrIcons);
 
     return Scaffold(
       appBar: AppBar(
@@ -48,7 +60,7 @@ class _ZoneFinderDetailsPageState extends State<ZoneFinderDetailsPage> {
       ),
       body: Column(
         children: [
-          imagenCarusel(icons, colors),
+          imagenCarusel(imagesOrIcons, colors),
           Expanded(
               child: SingleChildScrollView(
                   child: notificationDescription(notificationLongText)))
@@ -153,19 +165,15 @@ class _ZoneFinderDetailsPageState extends State<ZoneFinderDetailsPage> {
     );
   }
 
-  Widget imagenCarusel(List<IconData> icons, List<Color> colors) {
+  Widget imagenCarusel(List<Widget> widgets, List<Color> colors) {
     return Expanded(
       child: Container(
         color: Colors.grey[100],
         child: PageView.builder(
-          itemCount: icons.length,
+          itemCount: widgets.length,
           itemBuilder: (context, index) {
             return Center(
-              child: Icon(
-                icons[index],
-                size: 200,
-                color: colors[index], // C
-              ),
+              child: widgets[index], // Usar el widget directamente
             );
           },
         ),

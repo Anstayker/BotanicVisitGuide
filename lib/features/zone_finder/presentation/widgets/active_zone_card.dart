@@ -9,10 +9,12 @@ class ActiveZoneCard extends StatelessWidget {
     super.key,
     required this.context,
     required this.zoneData,
+    this.imageUrls,
   });
 
   final BuildContext context;
   final ZoneData zoneData;
+  final List<String>? imageUrls;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +25,8 @@ class ActiveZoneCard extends StatelessWidget {
           Navigator.pushNamed(
             context,
             AppRoutes.zoneFinderDetails,
-            arguments: ZoneFinderDetailsArgs(zoneData: zoneData),
+            arguments:
+                ZoneFinderDetailsArgs(zoneData: zoneData, imageUrls: imageUrls),
           );
         },
         child: Card(
@@ -32,10 +35,13 @@ class ActiveZoneCard extends StatelessWidget {
             padding: const EdgeInsets.all(16.0),
             child: Row(
               children: [
-                const Icon(
-                  Icons.image, // Icono que representa la imagen
-                  size: 100.0, // Tamaño del icono
-                ),
+                imageUrls != null && imageUrls!.isNotEmpty
+                    ? Image.network(imageUrls![0],
+                        width: 100, height: 100, fit: BoxFit.cover)
+                    : const Icon(
+                        Icons.image, // Icono que representa la imagen
+                        size: 100.0, // Tamaño del icono
+                      ),
                 const SizedBox(
                     width: 16.0), // Espacio entre el icono y el texto
                 Expanded(

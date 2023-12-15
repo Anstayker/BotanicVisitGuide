@@ -5,14 +5,15 @@ import '../../../../config/routes/app_routes.dart';
 import '../pages/zone_finder_details.dart';
 
 class ZoneFoundCard extends StatelessWidget {
-  const ZoneFoundCard({
-    super.key,
-    required this.context,
-    required this.zoneData,
-  });
+  const ZoneFoundCard(
+      {super.key,
+      required this.context,
+      required this.zoneData,
+      this.imageUrls});
 
   final ZoneData zoneData;
   final BuildContext context;
+  final List<String>? imageUrls;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +22,9 @@ class ZoneFoundCard extends StatelessWidget {
       child: Card(
         color: Colors.grey[100],
         child: ListTile(
-          leading: const Icon(Icons.forest, color: Colors.grey),
+          leading: imageUrls != null && imageUrls!.isNotEmpty
+              ? Image.network(imageUrls![0])
+              : const Icon(Icons.forest, color: Colors.grey),
           title: Text(
             zoneData.zoneName,
             overflow: TextOverflow.ellipsis,
@@ -35,7 +38,8 @@ class ZoneFoundCard extends StatelessWidget {
           trailing: const Icon(Icons.arrow_forward_ios),
           onTap: () {
             Navigator.pushNamed(context, AppRoutes.zoneFinderDetails,
-                arguments: ZoneFinderDetailsArgs(zoneData: zoneData));
+                arguments: ZoneFinderDetailsArgs(
+                    zoneData: zoneData, imageUrls: imageUrls));
           },
         ),
       ),

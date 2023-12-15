@@ -30,6 +30,8 @@ class ZoneFinderPage extends StatelessWidget {
             // TODO order zones
             zonesFound = state.zonesFound;
             zonesActive = state.zonesActive;
+
+            zonesFound = state.zones;
           }
           return CustomScrollView(
             slivers: <Widget>[
@@ -115,17 +117,35 @@ class ZoneFinderPage extends StatelessWidget {
         ),
       );
     } else {
-      return SliverList(
-        delegate: SliverChildBuilderDelegate(
-          (BuildContext context, int index) {
-            return ZoneFoundCard(
-              zoneData: zonesFound[index],
-              context: context,
-            );
-          },
-          childCount: zonesFound.length,
-        ),
-      );
+      return BlocProvider(
+          create: (_) => sl<ZoneFinderBloc>(),
+          child: BlocBuilder<ZoneFinderBloc, ZoneFinderState>(
+            builder: (context, state) {
+              return SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                    if (state is ZoneFinderInitial) {
+                      BlocProvider.of<ZoneFinderBloc>(context).add(
+                          GetZoneImagesEvent(zoneId: zonesFound[index].zoneId));
+                    }
+                    if (state is ZoneImagesLoadSuccess) {
+                      return ZoneFoundCard(
+                        zoneData: zonesFound[index],
+                        context: context,
+                        imageUrls: state
+                            .images, // Pasar las URLs de las imágenes a ZoneFoundCard
+                      );
+                    }
+                    return ZoneFoundCard(
+                      zoneData: zonesFound[index],
+                      context: context,
+                    );
+                  },
+                  childCount: zonesFound.length,
+                ),
+              );
+            },
+          ));
     }
   }
 }
