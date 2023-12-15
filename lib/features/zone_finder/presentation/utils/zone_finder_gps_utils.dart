@@ -24,11 +24,33 @@ class ZoneFinderGPSUtils {
           final waypointList = zoneData.waypoints;
           //print(currentPosition);
           if (_isPointInPolygon(waypointList, currentPosition)) {
-            //print('Funciona!');
+            print('Encontrado en poligono');
             result.add(zoneData);
           }
         }
-        return result;
+
+        // Meters
+        double threshold = 10;
+
+        for (var zoneData in zonesDataList) {
+          final waypointList = zoneData.waypoints;
+          for (var waypoint in waypointList) {
+            double distanceInMeters = Geolocator.distanceBetween(
+                currentPosition.latitude,
+                currentPosition.longitude,
+                waypoint.latitude,
+                waypoint.longitude);
+
+            if (distanceInMeters < threshold) {
+              print('Encontrado en radio');
+              if (!result.contains(zoneData)) {
+                result.add(zoneData);
+              }
+            }
+          }
+
+          return result;
+        }
       });
     }
 
