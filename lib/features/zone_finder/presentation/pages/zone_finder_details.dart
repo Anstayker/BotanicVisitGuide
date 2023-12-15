@@ -33,7 +33,7 @@ class _ZoneFinderDetailsPageState extends State<ZoneFinderDetailsPage> {
   StreamSubscription<void>? _playerFinishedPlayingSubscription;
   Duration _audioDuration = Duration.zero;
   Duration _currentPosition = Duration.zero;
-  double _bottomBarHeight = 64.0;
+  final double _bottomBarHeight = 64.0;
   bool _bottombarVisible = false;
 
   @override
@@ -264,18 +264,29 @@ class _ZoneFinderDetailsPageState extends State<ZoneFinderDetailsPage> {
   }
 
   Widget imagenCarusel(List<Widget> widgets, List<Color> colors) {
-    return Expanded(
-      child: Container(
-        color: Colors.grey[100],
-        child: PageView.builder(
-          itemCount: widgets.length,
-          itemBuilder: (context, index) {
-            return Center(
-              child: widgets[index], // Usar el widget directamente
-            );
-          },
+    if (widgets.length == 2) {
+      return Expanded(
+        child: Container(
+          color: Colors.grey[100],
+          child: Center(
+            child: widgets[0], // Devuelve la única imagen
+          ),
         ),
-      ),
-    );
+      );
+    } else {
+      return Expanded(
+        child: Container(
+          color: Colors.grey[100],
+          child: PageView.builder(
+            itemCount: widgets.length,
+            itemBuilder: (context, index) {
+              return Center(
+                child: widgets[index], // Usar el widget directamente
+              );
+            },
+          ),
+        ),
+      );
+    }
   }
 }

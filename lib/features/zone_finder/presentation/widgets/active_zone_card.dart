@@ -41,7 +41,9 @@ class ActiveZoneCard extends StatelessWidget {
                     ? Image.network(imageUrls![0],
                         width: 100, height: 100, fit: BoxFit.cover)
                     : const Icon(
-                        Icons.image, // Icono que representa la imagen
+                        Icons.location_on,
+                        color:
+                            Colors.redAccent, // Icono que representa la imagen
                         size: 100.0, // Tamaño del icono
                       ),
                 const SizedBox(

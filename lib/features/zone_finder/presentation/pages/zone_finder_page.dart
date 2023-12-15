@@ -83,16 +83,36 @@ class ZoneFinderPage extends StatelessWidget {
         ),
       );
     } else {
-      return SliverList(
-        delegate: SliverChildBuilderDelegate(
-          (BuildContext context, int index) {
-            // TODO implement zone card audio and images
-            return ActiveZoneCard(
-                context: context, zoneData: zonesActive[index]);
-          },
-          childCount: zonesActive.length,
-        ),
-      );
+      return BlocProvider(
+          create: (_) => sl<ZoneFinderBloc>(),
+          child: BlocBuilder<ZoneFinderBloc, ZoneFinderState>(
+            builder: (context, state) {
+              return SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                    if (state is ZoneFinderInitial) {
+                      BlocProvider.of<ZoneFinderBloc>(context).add(
+                          GetZoneImagesEvent(
+                              zoneId: zonesActive[index].zoneId));
+                    }
+                    if (state is ZoneImagesLoadSuccess) {
+                      return ActiveZoneCard(
+                        zoneData: zonesActive[index],
+                        context: context,
+                        imageUrls: state.images,
+                        audioUrl: state.audio,
+                      );
+                    }
+                    return ActiveZoneCard(
+                      zoneData: zonesActive[index],
+                      context: context,
+                    );
+                  },
+                  childCount: zonesActive.length,
+                ),
+              );
+            },
+          ));
     }
   }
 
